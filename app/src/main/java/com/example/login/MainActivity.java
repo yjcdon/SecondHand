@@ -10,12 +10,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+//jaiosdjaidjlajdla
         ImageView visibilityOff = findViewById(R.id.visibilityoff);
         ImageView visibility = findViewById(R.id.visibility);
         EditText password = findViewById(R.id.password);
@@ -33,6 +32,5 @@ public class MainActivity extends AppCompatActivity {
             password.setTransformationMethod(PasswordTransformationMethod.getInstance());
             password.setSelection(password.getText().length());
         });
-
     }
 }
