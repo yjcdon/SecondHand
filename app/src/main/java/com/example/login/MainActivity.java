@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//jaiosdj
+
         ImageView visibilityOff = findViewById(R.id.visibilityoff);
         ImageView visibility = findViewById(R.id.visibility);
         EditText password = findViewById(R.id.password);
