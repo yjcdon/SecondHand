@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,13 +13,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Login"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+
         <activity
-            android:name=".sign_up"
+            android:name=".login.forget_password"
+            android:exported="false"
+            android:label="忘记密码" />
+
+        <activity
+            android:name=".main"
             android:exported="false" />
+
         <activity
-            android:name=".sign_in"
-            android:exported="true" >
+            android:name=".login.sign_up"
+            android:exported="false"
+            android:label="注册" />
+
+        <activity
+            android:name=".login.sign_in"
+            android:exported="true"
+            android:label="GUET二手交易平台">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

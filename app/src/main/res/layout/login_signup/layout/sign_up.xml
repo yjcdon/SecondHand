@@ -4,38 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".sign_up">
+    tools:context=".login.sign_up">
 
     <EditText
         android:id="@+id/editTextText"
         android:layout_width="276dp"
         android:layout_height="45dp"
-        android:layout_marginTop="49dp"
         android:ems="10"
         android:hint="输入学号"
-        android:inputType="text"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_up_text" />
-
-    <TextView
-        android:id="@+id/sign_up_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="注 册"
-        android:textAlignment="center"
-        android:textSize="34sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteY="99dp" />
 
     <EditText
         android:id="@+id/editTextTextPassword"
         android:layout_width="276dp"
         android:layout_height="46dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="输入密码"
         android:inputType="textPassword"
@@ -48,7 +34,7 @@
         android:id="@+id/sign_up_btn"
         android:layout_width="270dp"
         android:layout_height="49dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="92dp"
         android:text="注 册"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -73,5 +59,18 @@
         app:layout_constraintBottom_toBottomOf="@id/editTextTextPassword"
         app:layout_constraintEnd_toEndOf="@id/editTextTextPassword"
         app:srcCompat="@drawable/baseline_visibility_off_24" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword2"
+        android:layout_width="276dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="再次输入密码"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

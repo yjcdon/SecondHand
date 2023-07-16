@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".sign_in">
+    tools:context=".login.sign_in">
 
     <EditText
         android:id="@+id/account"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:ems="10"
         android:hint="输入用户名"
         android:inputType="text"
@@ -22,7 +22,7 @@
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:ems="10"
@@ -35,7 +35,7 @@
 
     <Button
         android:id="@+id/loginBtn"
-        android:layout_width="330dp"
+        android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_marginTop="50dp"
         android:text="sign in"
@@ -95,7 +95,7 @@
 
     <CheckBox
         android:id="@+id/rememberMe"
-        android:layout_width="76dp"
+        android:layout_width="75dp"
         android:layout_height="50dp"
         android:text="记住我"
         app:layout_constraintLeft_toLeftOf="@id/password"
@@ -105,10 +105,21 @@
         android:id="@+id/signUpBtn"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:background="#EFE3E3"
+        android:background="@color/white"
         android:text="注册"
         android:textColor="#000000"
         app:layout_constraintRight_toRightOf="@id/password"
         app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <TextView
+        android:id="@+id/forgetPsw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginBottom="10dp"
+        android:text="忘记密码?"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="@id/password"
+        app:layout_constraintLeft_toRightOf="@id/password" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
