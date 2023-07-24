@@ -7,28 +7,29 @@
     tools:context=".login.sign_up">
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/signUp_stuNum"
         android:layout_width="276dp"
         android:layout_height="45dp"
         android:ems="10"
         android:hint="输入学号"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="99dp" />
+        tools:layout_editor_absoluteY="33dp" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/signUp_psw"
         android:layout_width="276dp"
         android:layout_height="46dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="84dp"
         android:ems="10"
         android:hint="输入密码"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+        app:layout_constraintTop_toBottomOf="@+id/signUp_stuNum" />
 
     <Button
         android:id="@+id/sign_up_btn"
@@ -39,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/signUp_psw" />
 
     <ImageView
         android:id="@+id/visibilityImageView"
@@ -47,8 +48,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPassword"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
+        app:layout_constraintBottom_toBottomOf="@+id/signUp_psw"
+        app:layout_constraintEnd_toEndOf="@+id/signUp_psw"
         app:srcCompat="@drawable/baseline_visibility_24" />
 
     <ImageView
@@ -56,12 +57,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="@id/editTextTextPassword"
-        app:layout_constraintEnd_toEndOf="@id/editTextTextPassword"
+        app:layout_constraintBottom_toBottomOf="@id/signUp_psw"
+        app:layout_constraintEnd_toEndOf="@id/signUp_psw"
         app:srcCompat="@drawable/baseline_visibility_off_24" />
 
     <EditText
-        android:id="@+id/editTextTextPassword2"
+        android:id="@+id/signUp_psw2"
         android:layout_width="276dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -71,6 +72,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/signUp_psw" />
+
+    <EditText
+        android:id="@+id/signUp_phoneNum"
+        android:layout_width="276dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="输入手机号"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signUp_stuNum" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

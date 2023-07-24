@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.login.R;
-import com.example.login.main;
+import com.example.login.Main;
 
 public class sign_in extends AppCompatActivity {
     private ImageView visibilityOff, visibility;
@@ -60,7 +60,7 @@ public class sign_in extends AppCompatActivity {
 
 //        注册成功后,把在注册页面填写的信息自动填入登录页面的框中
         if (bundle != null) {
-            String account = bundle.getString("account");
+            String account = bundle.getString("stuNum");
             String password = bundle.getString("password");
             accountText.setText(account);
             passwordText.setText(password);
@@ -87,7 +87,7 @@ public class sign_in extends AppCompatActivity {
             } else if (TextUtils.isEmpty(account)) {
                 Toast.makeText(sign_in.this, "账号不能为空!", Toast.LENGTH_SHORT).show();
             } else {
-                Intent intent = new Intent(sign_in.this, main.class);
+                Intent intent = new Intent(sign_in.this, Main.class);
                 startActivity(intent);
                 Toast.makeText(sign_in.this, "登陆成功", Toast.LENGTH_SHORT).show();
             }
@@ -108,12 +108,9 @@ public class sign_in extends AppCompatActivity {
             startActivity(intent);
         });
 
-        forgetPsw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(sign_in.this, forget_password.class);
-                startActivity(intent);
-            }
+        forgetPsw.setOnClickListener(view -> {
+            Intent intent = new Intent(sign_in.this, forget_password.class);
+            startActivity(intent);
         });
     }
 

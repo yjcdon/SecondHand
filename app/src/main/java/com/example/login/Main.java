@@ -12,7 +12,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.login.databinding.ActivityMainBinding;
 
-public class main extends AppCompatActivity {
+public class Main extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
