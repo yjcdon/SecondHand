@@ -1,7 +1,8 @@
-package com.example.login;
+package com.example.login.ButtonNavigation;
 
 import android.os.Bundle;
 
+import com.example.login.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;

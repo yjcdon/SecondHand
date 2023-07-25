@@ -21,7 +21,7 @@
             android:label="忘记密码" />
 
         <activity
-            android:name=".Main"
+            android:name=".ButtonNavigation.Main"
             android:exported="false" />
 
         <activity

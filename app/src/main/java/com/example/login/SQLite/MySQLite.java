@@ -75,26 +75,32 @@ public class MySQLite extends SQLiteOpenHelper {
     public long updateToPsw(Student student) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        String stuNum = student.getStuNum();
+        String phone=student.getPhone();
         String newPsw = student.getPassword();
 
         values.put("password", newPsw);
 
-        return db.update(TABLE_NAME, values, "stuNum=?", new String[]{stuNum});
+        return db.update(TABLE_NAME, values, "phone=?", new String[]{phone});
     }
 
-    public String searchByStuNum(Student student) {
+    public Student searchByStuNum(Student student) {
         SQLiteDatabase db = this.getReadableDatabase();
         String stuNum = student.getStuNum();
-        String phone = student.getPhone();
 
-        Cursor cursor = db.query(TABLE_NAME, new String[]{"phone"}, "stuNum=?", new String[]{stuNum},
+        Cursor cursor = db.query(TABLE_NAME, new String[]{"stuNum", "password"}, "stuNum=?", new String[]{stuNum},
                 null, null, null);
 
         if (cursor.moveToFirst()) {
-            phone = cursor.getString(cursor.getColumnIndexOrThrow("phone"));
+            stuNum = cursor.getString(cursor.getColumnIndexOrThrow("stuNum"));
+            String password = cursor.getString(cursor.getColumnIndexOrThrow("password"));
+
+            student.setStuNum(stuNum);
+            student.setPassword(password);
+        } else {
+            student = null;
         }
         cursor.close();
-        return phone;
+
+        return student;
     }
 }

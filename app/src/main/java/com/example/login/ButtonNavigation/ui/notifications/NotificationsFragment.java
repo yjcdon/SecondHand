@@ -1,4 +1,4 @@
-package com.example.login.ui.notifications;
+package com.example.login.ButtonNavigation.ui.notifications;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

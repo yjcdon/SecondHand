@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.login.R;
+import com.example.login.SQLite.MySQLite;
+import com.example.login.Student;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -40,22 +42,28 @@ public class forget_password extends AppCompatActivity {
         limitNumberLength();
 
         resetBtn.setOnClickListener(view -> {
-            String psw1 = newPsw1.getText().toString();
-            String psw2 = newPsw2.getText().toString();
-            String pNum = phoneNum.getText().toString();
-            String verCode = verificationCode.getText().toString();
+            String psw1 = newPsw1.getText().toString().trim();
+            String psw2 = newPsw2.getText().toString().trim();
+            String phoneText = phoneNum.getText().toString().trim();
+            String verCode = verificationCode.getText().toString().trim();
 
 //            手机号输入要有其他限制
-            if (pNum.isEmpty()) {
+            if (phoneText.isEmpty()) {
                 Toast.makeText(forget_password.this, "请输入手机号!", Toast.LENGTH_SHORT).show();
             } else if (Objects.equals(verCode, "")) {
                 Toast.makeText(forget_password.this, "请输入验证码!", Toast.LENGTH_SHORT).show();
 //                第三方API
-            } else if (!Objects.equals(verCode, "123456")) {
+            } else if (!Objects.equals(verCode, "123")) {
                 Toast.makeText(forget_password.this, "验证码错误!", Toast.LENGTH_SHORT).show();
             } else if (!Objects.equals(psw1, psw2)) {
                 Toast.makeText(forget_password.this, "请输入相同的密码!", Toast.LENGTH_SHORT).show();
             } else {
+                MySQLite mySQLite = new MySQLite(this);
+                Student student = new Student();
+                student.setPhone(phoneText);
+                student.setPassword(psw2);
+                mySQLite.updateToPsw(student);
+
                 Toast.makeText(forget_password.this, "重置密码成功!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(forget_password.this, sign_in.class);
                 startActivity(intent);

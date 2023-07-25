@@ -16,11 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.login.R;
-import com.example.login.Main;
+import com.example.login.ButtonNavigation.Main;
+import com.example.login.SQLite.MySQLite;
+import com.example.login.Student;
 
 public class sign_in extends AppCompatActivity {
     private ImageView visibilityOff, visibility;
-    private EditText accountText, passwordText;
+    private EditText stuNum, password;
     private Button loginBtn, signUpBtn;
     private CheckBox rememberMe;
     private TextView forgetPsw;
@@ -33,38 +35,26 @@ public class sign_in extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in);
-
-        visibilityOff = findViewById(R.id.visibilityoff);
-        visibility = findViewById(R.id.visibility);
-        passwordText = findViewById(R.id.password);
-        loginBtn = findViewById(R.id.loginBtn);
-        signUpBtn = findViewById(R.id.signUpBtn);
-        accountText = findViewById(R.id.account);
-        rememberMe = findViewById(R.id.rememberMe);
-        forgetPsw = findViewById(R.id.forgetPsw);
-        Bundle bundle = getIntent().getExtras();
-        // 初始化SharedPreferences实例
-        sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-
+        intiView();
         // 检查SharedPreferences中是否存在已保存的账号和密码
         String savedAccount = sharedPreferences.getString(KEY_ACCOUNT, "");
         String savedPassword = sharedPreferences.getString(KEY_PASSWORD, "");
 
         // 如果存在已保存的账号和密码，自动填充到输入框中
         if (!TextUtils.isEmpty(savedAccount) && !TextUtils.isEmpty(savedPassword)) {
-            accountText.setText(savedAccount);
-            passwordText.setText(savedPassword);
+            stuNum.setText(savedAccount);
+            password.setText(savedPassword);
             rememberMe.setChecked(true);
         }
 
 
+        Bundle bundle = getIntent().getExtras();
 //        注册成功后,把在注册页面填写的信息自动填入登录页面的框中
         if (bundle != null) {
             String account = bundle.getString("stuNum");
             String password = bundle.getString("password");
-            accountText.setText(account);
-            passwordText.setText(password);
-
+            stuNum.setText(account);
+            this.password.setText(password);
         }
 
         visibilityOff.setOnClickListener(view -> {
@@ -75,30 +65,42 @@ public class sign_in extends AppCompatActivity {
             togglePasswordVisibility();
         });
 
-        loginBtn.setOnClickListener(view -> {
-            String account = accountText.getText().toString();
-            String password = passwordText.getText().toString();
 
-//            需要多加判断条件
-            if (TextUtils.isEmpty(account) && TextUtils.isEmpty(password)) {
+        loginBtn.setOnClickListener(view -> {
+            //用于查询
+            String stuNumText = stuNum.getText().toString().trim();
+            //查询后,用于对比
+            String passwordText = password.getText().toString().trim();
+
+            if (stuNumText.isEmpty() || passwordText.isEmpty()) {
                 Toast.makeText(sign_in.this, "请输入账号和密码!", Toast.LENGTH_SHORT).show();
-            } else if (TextUtils.isEmpty(password)) {
-                Toast.makeText(sign_in.this, "密码不能为空!", Toast.LENGTH_SHORT).show();
-            } else if (TextUtils.isEmpty(account)) {
-                Toast.makeText(sign_in.this, "账号不能为空!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            MySQLite mySQLite = new MySQLite(this);
+            Student student = new Student();
+            student.setStuNum(stuNumText);
+
+            Student student2 = mySQLite.searchByStuNum(student);
+
+            if (student2 == null) {
+                Toast.makeText(sign_in.this, "账号错误!", Toast.LENGTH_SHORT).show();
+            } else if (!passwordText.equals(student2.getPassword())) {
+                Toast.makeText(sign_in.this, "密码错误!", Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(sign_in.this, Main.class);
                 startActivity(intent);
-                Toast.makeText(sign_in.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(sign_in.this, "登陆成功!", Toast.LENGTH_SHORT).show();
             }
         });
+
 
 //        CheckBox先设置监听,再判断是否选中
         rememberMe.setOnCheckedChangeListener((compoundButton, checked) -> {
             if (checked) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(KEY_ACCOUNT, accountText.getText().toString());
-                editor.putString(KEY_PASSWORD, passwordText.getText().toString());
+                editor.putString(KEY_ACCOUNT, stuNum.getText().toString().trim());
+                editor.putString(KEY_PASSWORD, password.getText().toString().trim());
                 editor.apply();
             }
         });
@@ -118,13 +120,26 @@ public class sign_in extends AppCompatActivity {
         if (visibilityOff.getVisibility() == View.VISIBLE) {
             visibilityOff.setVisibility(View.GONE);
             visibility.setVisibility(View.VISIBLE);
-            passwordText.setTransformationMethod(null);
+            password.setTransformationMethod(null);
         } else {
             visibility.setVisibility(View.GONE);
             visibilityOff.setVisibility(View.VISIBLE);
-            passwordText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            password.setTransformationMethod(PasswordTransformationMethod.getInstance());
         }
-        passwordText.setSelection(passwordText.getText().length());
+        password.setSelection(password.getText().length());
+    }
+
+    private void intiView() {
+        visibilityOff = findViewById(R.id.visibilityoff);
+        visibility = findViewById(R.id.visibility);
+        password = findViewById(R.id.password);
+        loginBtn = findViewById(R.id.loginBtn);
+        signUpBtn = findViewById(R.id.signUpBtn);
+        stuNum = findViewById(R.id.account);
+        rememberMe = findViewById(R.id.rememberMe);
+        forgetPsw = findViewById(R.id.forgetPsw);
+        // 初始化SharedPreferences实例
+        sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
     }
 
 }
