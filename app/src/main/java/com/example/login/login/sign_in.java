@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,15 +16,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.login.MySQL.MySQLTest;
 import com.example.login.R;
 import com.example.login.ButtonNavigation.Main;
 import com.example.login.SQLite.MySQLite;
 import com.example.login.Student;
 
+import java.sql.Connection;
+
 public class sign_in extends AppCompatActivity {
+    private static final String TAG = "ConnectMySQLTask";
     private ImageView visibilityOff, visibility;
     private EditText stuNum, password;
-    private Button loginBtn, signUpBtn;
+    private Button loginBtn, signUpBtn, testBtn;
     private CheckBox rememberMe;
     private TextView forgetPsw;
 
@@ -114,6 +119,23 @@ public class sign_in extends AppCompatActivity {
             Intent intent = new Intent(sign_in.this, forget_password.class);
             startActivity(intent);
         });
+
+        testBtn.setOnClickListener(view -> {
+            new Thread(() -> {
+                new MySQLTest();
+                try {
+                    Connection connection = MySQLTest.getConnect();
+                    if (connection != null) {
+                        Log.d(TAG, "连接成功");
+                    } else {
+                        Log.d(TAG, "连接失败");
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
+
+        });
     }
 
     private void togglePasswordVisibility() {
@@ -138,6 +160,7 @@ public class sign_in extends AppCompatActivity {
         stuNum = findViewById(R.id.account);
         rememberMe = findViewById(R.id.rememberMe);
         forgetPsw = findViewById(R.id.forgetPsw);
+        testBtn = findViewById(R.id.testBtn);
         // 初始化SharedPreferences实例
         sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
     }
