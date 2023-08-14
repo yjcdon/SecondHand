@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login.sign_in">
+    tools:context=".login.SignIn">
 
     <EditText
         android:id="@+id/account"
@@ -121,15 +121,5 @@
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="@id/password"
         app:layout_constraintLeft_toRightOf="@id/password" />
-
-    <Button
-        android:id="@+id/testBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="连接"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

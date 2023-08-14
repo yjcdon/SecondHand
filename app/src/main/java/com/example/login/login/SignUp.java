@@ -12,11 +12,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.login.MySQL.MySQL;
 import com.example.login.R;
-import com.example.login.SQLite.MySQLite;
 import com.example.login.Student;
 
-public class sign_up extends AppCompatActivity {
+public class SignUp extends AppCompatActivity {
     private ImageView visibility, visibilityOff;
     private Button signUpBtn;
     private EditText password1, password2, stuNum, phoneNum;
@@ -75,31 +75,37 @@ public class sign_up extends AppCompatActivity {
         String psw2 = password2.getText().toString().trim();
 
         if (stuNumText.isEmpty() && psw1.isEmpty() && psw2.isEmpty()) {
-            Toast.makeText(sign_up.this, "请输入账号和密码!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUp.this, "请输入账号和密码!", Toast.LENGTH_SHORT).show();
         } else if (psw1.isEmpty()) {
-            Toast.makeText(sign_up.this, "密码不能为空!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUp.this, "密码不能为空!", Toast.LENGTH_SHORT).show();
         } else if (stuNumText.isEmpty()) {
-            Toast.makeText(sign_up.this, "账号不能为空!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUp.this, "账号不能为空!", Toast.LENGTH_SHORT).show();
         } else if (!psw1.equals(psw2)) {
-            Toast.makeText(sign_up.this, "密码不一致!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUp.this, "密码不一致!", Toast.LENGTH_SHORT).show();
         } else {
-            MySQLite mySQLite = new MySQLite(this);
             Student student = new Student();
             student.setStuNum(stuNumText);
             student.setPhone(phoneNumText);
             student.setPassword(psw1);
-            mySQLite.insertData(student);
+            new Thread(() -> {
+                MySQL mySQL = new MySQL();
+                mySQL.insertData(student);
 
-            Bundle bundle = new Bundle();
-            // 将账号和密码添加到 Bundle 中,key,value
-            bundle.putString("stuNum", stuNumText);
-            bundle.putString("password", psw1);
+                runOnUiThread(() -> {
+                    Bundle bundle = new Bundle();
+                    // 将账号和密码添加到 Bundle 中,key,value
+                    bundle.putString("stuNum", stuNumText);
+                    bundle.putString("password", psw1);
 
-            // 创建一个新的 Intent 对象，并将 Bundle 作为参数传递进去
-            Intent intent = new Intent(sign_up.this, sign_in.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
-            Toast.makeText(sign_up.this, "注册成功!", Toast.LENGTH_LONG).show();
+                    // 创建一个新的 Intent 对象，并将 Bundle 作为参数传递进去
+                    Intent intent = new Intent(SignUp.this, SignIn.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    Toast.makeText(SignUp.this, "注册成功!", Toast.LENGTH_LONG).show();
+                });
+            }).start();
+
+
         }
     }
 

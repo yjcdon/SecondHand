@@ -16,7 +16,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".login.forget_password"
+            android:name=".login.ForgetPassword"
             android:exported="false"
             android:label="忘记密码" />
 
@@ -25,12 +25,12 @@
             android:exported="false" />
 
         <activity
-            android:name=".login.sign_up"
+            android:name=".login.SignUp"
             android:exported="false"
             android:label="注册" />
 
         <activity
-            android:name=".login.sign_in"
+            android:name=".login.SignIn"
             android:exported="true"
             android:label="GUET二手交易平台">
             <intent-filter>
