@@ -7,8 +7,8 @@
     tools:context=".login.SignIn">
 
     <EditText
-        android:id="@+id/account"
-        android:layout_width="250dp"
+        android:id="@+id/signIn_stuNum"
+        android:layout_width="230dp"
         android:layout_height="50dp"
         android:layout_marginTop="80dp"
         android:ems="10"
@@ -21,8 +21,8 @@
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/password"
-        android:layout_width="250dp"
+        android:id="@+id/signIn_password"
+        android:layout_width="230dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:ems="10"
@@ -31,35 +31,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/account" />
+        app:layout_constraintTop_toBottomOf="@id/signIn_stuNum" />
 
     <Button
         android:id="@+id/loginBtn"
-        android:layout_width="250dp"
+        android:layout_width="230dp"
         android:layout_height="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="84dp"
         android:text="sign in"
         android:textAlignment="center"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/password" />
+        app:layout_constraintTop_toBottomOf="@id/signIn_password" />
 
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="30dp"
         android:layout_height="50dp"
-        app:layout_constraintRight_toLeftOf="@id/account"
-        app:layout_constraintTop_toTopOf="@id/account"
+        app:layout_constraintRight_toLeftOf="@id/signIn_stuNum"
+        app:layout_constraintTop_toTopOf="@id/signIn_stuNum"
         app:srcCompat="@drawable/baseline_person_outline_24" />
 
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="30dp"
         android:layout_height="50dp"
-        app:layout_constraintRight_toLeftOf="@id/password"
-        app:layout_constraintTop_toTopOf="@id/password"
+        app:layout_constraintRight_toLeftOf="@id/signIn_password"
+        app:layout_constraintTop_toTopOf="@id/signIn_password"
         app:srcCompat="@drawable/baseline_lock_24" />
 
     <ImageView
@@ -67,8 +67,8 @@
         android:layout_width="34dp"
         android:layout_height="32dp"
         android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="@id/password"
-        app:layout_constraintRight_toRightOf="@id/password"
+        app:layout_constraintBottom_toBottomOf="@id/signIn_password"
+        app:layout_constraintRight_toRightOf="@id/signIn_password"
         app:srcCompat="@drawable/baseline_visibility_off_24" />
 
     <ImageView
@@ -77,8 +77,8 @@
         android:layout_height="32dp"
         android:layout_marginBottom="10dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/password"
-        app:layout_constraintRight_toRightOf="@id/password"
+        app:layout_constraintBottom_toBottomOf="@id/signIn_password"
+        app:layout_constraintRight_toRightOf="@id/signIn_password"
         app:srcCompat="@drawable/baseline_visibility_24"
         tools:ignore="MissingConstraints" />
 
@@ -87,7 +87,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/account"
+        app:layout_constraintBottom_toTopOf="@+id/signIn_stuNum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -97,29 +97,31 @@
         android:id="@+id/rememberMe"
         android:layout_width="75dp"
         android:layout_height="50dp"
+        android:layout_marginStart="8dp"
         android:text="记住我"
-        app:layout_constraintLeft_toLeftOf="@id/password"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintStart_toEndOf="@+id/signIn_password"
+        app:layout_constraintTop_toTopOf="@+id/signIn_password" />
 
     <Button
         android:id="@+id/signUpBtn"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
+        android:layout_marginTop="8dp"
         android:background="@color/white"
         android:text="注册"
         android:textColor="#000000"
-        app:layout_constraintRight_toRightOf="@id/password"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintRight_toRightOf="@id/signIn_password"
+        app:layout_constraintTop_toBottomOf="@+id/signIn_password" />
 
-    <TextView
-        android:id="@+id/forgetPsw"
+    <Button
+        android:id="@+id/forgetPswBtn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginBottom="10dp"
-        android:text="忘记密码?"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="@id/password"
-        app:layout_constraintLeft_toRightOf="@id/password" />
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="52dp"
+        android:background="@color/white"
+        android:text="忘记密码"
+        app:layout_constraintEnd_toStartOf="@+id/signUpBtn"
+        app:layout_constraintTop_toBottomOf="@+id/signIn_password" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

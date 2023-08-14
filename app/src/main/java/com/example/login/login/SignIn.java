@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
@@ -23,9 +22,8 @@ import com.example.login.Student;
 public class SignIn extends AppCompatActivity {
     private ImageView visibilityOff, visibility;
     private EditText stuNum, password;
-    private Button loginBtn, signUpBtn;
+    private Button loginBtn, signUpBtn,forgetPswBtn;
     private CheckBox rememberMe;
-    private TextView forgetPsw;
 
     private static final String KEY_ACCOUNT = "account", KEY_PASSWORD = "password", PREF_NAME = "myPref";
     private SharedPreferences sharedPreferences;
@@ -35,26 +33,26 @@ public class SignIn extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in);
-        intiView();
-        // 检查SharedPreferences中是否存在已保存的账号和密码
-        String savedAccount = sharedPreferences.getString(KEY_ACCOUNT, "");
-        String savedPassword = sharedPreferences.getString(KEY_PASSWORD, "");
 
-        // 如果存在已保存的账号和密码，自动填充到输入框中
-        if (!TextUtils.isEmpty(savedAccount) && !TextUtils.isEmpty(savedPassword)) {
-            stuNum.setText(savedAccount);
-            password.setText(savedPassword);
-            rememberMe.setChecked(true);
-        }
+        initView();
+        loadSavedSP();
 
-
-        Bundle bundle = getIntent().getExtras();
 //        注册成功后,把在注册页面填写的信息自动填入登录页面的框中
+        Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             String account = bundle.getString("stuNum");
             String password = bundle.getString("password");
             stuNum.setText(account);
             this.password.setText(password);
+        }
+
+//        如果重置密码成功,那就重新输入账号密码
+        boolean resetPsw = getIntent().getBooleanExtra("resetPsw", false);
+        if (resetPsw) {
+            deleteSP();
+            stuNum.setText("");
+            password.setText("");
+            rememberMe.setChecked(false);
         }
 
         visibilityOff.setOnClickListener(view -> {
@@ -67,9 +65,7 @@ public class SignIn extends AppCompatActivity {
 
 
         loginBtn.setOnClickListener(view -> {
-            //用于查询
             String stuNumText = stuNum.getText().toString().trim();
-            //查询后,用于对比
             String passwordText = password.getText().toString().trim();
 
             if (stuNumText.isEmpty() || passwordText.isEmpty()) {
@@ -96,18 +92,14 @@ public class SignIn extends AppCompatActivity {
                 });
 
             }).start();
-
-
         });
 
-
 //        CheckBox先设置监听,再判断是否选中
-        rememberMe.setOnCheckedChangeListener((compoundButton, checked) -> {
-            if (checked) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(KEY_ACCOUNT, stuNum.getText().toString().trim());
-                editor.putString(KEY_PASSWORD, password.getText().toString().trim());
-                editor.apply();
+        rememberMe.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if (isChecked) {
+                createSP();
+            } else {
+                deleteSP();
             }
         });
 
@@ -116,7 +108,7 @@ public class SignIn extends AppCompatActivity {
             startActivity(intent);
         });
 
-        forgetPsw.setOnClickListener(view -> {
+        forgetPswBtn.setOnClickListener(view -> {
             Intent intent = new Intent(SignIn.this, ForgetPassword.class);
             startActivity(intent);
         });
@@ -136,17 +128,44 @@ public class SignIn extends AppCompatActivity {
         password.setSelection(password.getText().length());
     }
 
-    private void intiView() {
+    private void initView() {
         visibilityOff = findViewById(R.id.visibilityoff);
         visibility = findViewById(R.id.visibility);
-        password = findViewById(R.id.password);
+        password = findViewById(R.id.signIn_password);
         loginBtn = findViewById(R.id.loginBtn);
         signUpBtn = findViewById(R.id.signUpBtn);
-        stuNum = findViewById(R.id.account);
+        stuNum = findViewById(R.id.signIn_stuNum);
         rememberMe = findViewById(R.id.rememberMe);
-        forgetPsw = findViewById(R.id.forgetPsw);
+        forgetPswBtn = findViewById(R.id.forgetPswBtn);
         // 初始化SharedPreferences实例
         sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+    }
+
+    public void deleteSP() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(KEY_ACCOUNT);
+        editor.remove(KEY_PASSWORD);
+        editor.apply();
+    }
+
+    public void createSP() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_ACCOUNT, stuNum.getText().toString().trim());
+        editor.putString(KEY_PASSWORD, password.getText().toString().trim());
+        editor.apply();
+    }
+
+    private void loadSavedSP() {
+        // 检查SharedPreferences中是否存在已保存的账号和密码
+        String savedAccount = sharedPreferences.getString(KEY_ACCOUNT, "");
+        String savedPassword = sharedPreferences.getString(KEY_PASSWORD, "");
+
+        // 如果存在已保存的账号和密码，自动填充到输入框中
+        if (!savedAccount.isEmpty() && !savedPassword.isEmpty()) {
+            stuNum.setText(savedAccount);
+            password.setText(savedPassword);
+            rememberMe.setChecked(true);
+        }
     }
 
 }

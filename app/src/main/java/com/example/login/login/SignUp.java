@@ -48,11 +48,11 @@ public class SignUp extends AppCompatActivity {
     private void initView() {
         visibility = findViewById(R.id.visibilityImageView);
         visibilityOff = findViewById(R.id.visibilityOffImageView);
-        signUpBtn = findViewById(R.id.sign_up_btn);
+        signUpBtn = findViewById(R.id.signUp_btn);
         password1 = findViewById(R.id.signUp_psw);
         password2 = findViewById(R.id.signUp_psw2);
         stuNum = findViewById(R.id.signUp_stuNum);
-        phoneNum = findViewById(R.id.signUp_phoneNum);
+        phoneNum = findViewById(R.id.signUp_phone);
     }
 
     private void togglePasswordVisibility() {

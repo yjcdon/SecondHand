@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class ForgetPassword extends AppCompatActivity {
     private EditText phoneNum, stuNum, newPsw1, newPsw2;
-    private Button cancelBtn, resetBtn;
+    private Button resetBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,16 +52,13 @@ public class ForgetPassword extends AppCompatActivity {
                     runOnUiThread(() -> {
                         Toast.makeText(ForgetPassword.this, "重置密码成功!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(ForgetPassword.this, SignIn.class);
+                        intent.putExtra("resetPsw", true);
                         startActivity(intent);
                     });
                 }).start();
             }
         });
 
-        cancelBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(ForgetPassword.this, SignIn.class);
-            startActivity(intent);
-        });
     }
 
     private void limitNumberLength() {
@@ -77,7 +74,6 @@ public class ForgetPassword extends AppCompatActivity {
         newPsw1 = findViewById(R.id.newPsw1);
         newPsw2 = findViewById(R.id.newPsw2);
         resetBtn = findViewById(R.id.resetPswBtn);
-        cancelBtn = findViewById(R.id.cancelResetPswBtn);
     }
 
 }

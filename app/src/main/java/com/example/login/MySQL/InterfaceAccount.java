@@ -2,7 +2,7 @@ package com.example.login.MySQL;
 
 import com.example.login.Student;
 
-public interface MySQLInterface {
+public interface InterfaceAccount {
     void insertData(Student student);
 
     void deleteByStuNum(String stuNum);
@@ -10,4 +10,5 @@ public interface MySQLInterface {
     void updatePswByStuNumAndPhone(Student student);
 
     Student searchByStuNum(String stuNum);
+
 }
