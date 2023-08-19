@@ -2,7 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -14,21 +22,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Login"
         tools:targetApi="31">
-
         <activity
             android:name=".login.ForgetPassword"
             android:exported="false"
             android:label="忘记密码" />
-
         <activity
             android:name=".ButtonNavigation.Main"
             android:exported="false" />
-
         <activity
             android:name=".login.SignUp"
             android:exported="false"
             android:label="注册" />
-
         <activity
             android:name=".login.SignIn"
             android:exported="true"

@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView10"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <EditText
@@ -38,7 +38,7 @@
         android:layout_width="230dp"
         android:layout_height="50dp"
         android:layout_marginTop="84dp"
-        android:text="sign in"
+        android:text="log in"
         android:textAlignment="center"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,17 +82,6 @@
         app:srcCompat="@drawable/baseline_visibility_24"
         tools:ignore="MissingConstraints" />
 
-    <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/signIn_stuNum"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/picture" />
-
     <CheckBox
         android:id="@+id/rememberMe"
         android:layout_width="75dp"
@@ -104,23 +93,23 @@
 
     <Button
         android:id="@+id/signUpBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:background="@color/white"
         android:text="注册"
-        android:textColor="#000000"
         app:layout_constraintRight_toRightOf="@id/signIn_password"
         app:layout_constraintTop_toBottomOf="@+id/signIn_password" />
 
     <Button
         android:id="@+id/forgetPswBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="110dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="52dp"
         android:background="@color/white"
         android:text="忘记密码"
+        android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/signUpBtn"
         app:layout_constraintTop_toBottomOf="@+id/signIn_password" />
 

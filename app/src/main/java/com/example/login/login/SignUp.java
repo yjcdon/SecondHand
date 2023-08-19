@@ -12,9 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.login.MySQL.MySQL;
+import com.example.login.MySQL.Account;
 import com.example.login.R;
-import com.example.login.Student;
+import com.example.login.StudentInfo;
 
 public class SignUp extends AppCompatActivity {
     private ImageView visibility, visibilityOff;
@@ -83,13 +83,13 @@ public class SignUp extends AppCompatActivity {
         } else if (!psw1.equals(psw2)) {
             Toast.makeText(SignUp.this, "密码不一致!", Toast.LENGTH_SHORT).show();
         } else {
-            Student student = new Student();
-            student.setStuNum(stuNumText);
-            student.setPhone(phoneNumText);
-            student.setPassword(psw1);
+            StudentInfo studentInfo = new StudentInfo();
+            studentInfo.setStuNum(stuNumText);
+            studentInfo.setPhone(phoneNumText);
+            studentInfo.setPassword(psw1);
             new Thread(() -> {
-                MySQL mySQL = new MySQL();
-                mySQL.insertData(student);
+                Account account = new Account();
+                account.insertData(studentInfo);
 
                 runOnUiThread(() -> {
                     Bundle bundle = new Bundle();

@@ -1,14 +1,13 @@
 package com.example.login.MySQL;
 
-import com.example.login.Student;
+import com.example.login.StudentInfo;
 
 public interface InterfaceAccount {
-    void insertData(Student student);
+    void insertData(StudentInfo studentInfo);
 
     void deleteByStuNum(String stuNum);
 
-    void updatePswByStuNumAndPhone(Student student);
+    void updatePswByStuNumAndPhone(StudentInfo studentInfo);
 
-    Student searchByStuNum(String stuNum);
-
+    StudentInfo searchByStuNum(String stuNum);
 }

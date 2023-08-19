@@ -9,9 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.login.MySQL.MySQL;
+import com.example.login.MySQL.Account;
 import com.example.login.R;
-import com.example.login.Student;
+import com.example.login.StudentInfo;
 
 import java.util.Objects;
 
@@ -41,14 +41,14 @@ public class ForgetPassword extends AppCompatActivity {
             } else if (!Objects.equals(psw1, psw2)) {
                 Toast.makeText(ForgetPassword.this, "请输入相同的密码!", Toast.LENGTH_SHORT).show();
             } else {
-                Student student = new Student();
-                student.setStuNum(stuNumText);
-                student.setPhone(phoneText);
-                student.setPassword(psw2);
+                StudentInfo studentInfo = new StudentInfo();
+                studentInfo.setStuNum(stuNumText);
+                studentInfo.setPhone(phoneText);
+                studentInfo.setPassword(psw2);
 
                 new Thread(() -> {
-                    MySQL mySQL = new MySQL();
-                    mySQL.updatePswByStuNumAndPhone(student);
+                    Account account = new Account();
+                    account.updatePswByStuNumAndPhone(studentInfo);
                     runOnUiThread(() -> {
                         Toast.makeText(ForgetPassword.this, "重置密码成功!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(ForgetPassword.this, SignIn.class);

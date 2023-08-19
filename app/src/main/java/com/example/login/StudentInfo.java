@@ -4,7 +4,7 @@ package com.example.login;
 这是保存输入数据的类
  */
 
-public class Student {
+public class StudentInfo {
     private String stuNum, password, phone;
 
     @Override

@@ -2,22 +2,23 @@ package com.example.login.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.login.MySQL.MySQL;
+import com.example.login.MySQL.Account;
 import com.example.login.R;
 import com.example.login.ButtonNavigation.Main;
-import com.example.login.Student;
+import com.example.login.StudentInfo;
 
 public class SignIn extends AppCompatActivity {
     private ImageView visibilityOff, visibility;
@@ -73,16 +74,16 @@ public class SignIn extends AppCompatActivity {
                 return;
             }
 
-            Student student = new Student();
-            student.setStuNum(stuNumText);
+            StudentInfo studentInfo = new StudentInfo();
+            studentInfo.setStuNum(stuNumText);
 
             new Thread(() -> {
-                MySQL mySQL = new MySQL();
-                Student student2 = mySQL.searchByStuNum(student.getStuNum());
+                Account account = new Account();
+                StudentInfo studentInfo2 = account.searchByStuNum(studentInfo.getStuNum());
                 runOnUiThread(() -> {
-                    if (student2 == null) {
+                    if (studentInfo2 == null) {
                         Toast.makeText(SignIn.this, "学号错误!", Toast.LENGTH_SHORT).show();
-                    } else if (!passwordText.equals(student2.getPassword())) {
+                    } else if (!passwordText.equals(studentInfo2.getPassword())) {
                         Toast.makeText(SignIn.this, "密码错误!", Toast.LENGTH_SHORT).show();
                     } else {
                         Intent intent = new Intent(SignIn.this, Main.class);
@@ -98,6 +99,7 @@ public class SignIn extends AppCompatActivity {
         rememberMe.setOnCheckedChangeListener((compoundButton, isChecked) -> {
             if (isChecked) {
                 createSP();
+                loadSavedSP();
             } else {
                 deleteSP();
             }
