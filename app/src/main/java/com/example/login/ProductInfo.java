@@ -1,13 +1,12 @@
 package com.example.login;
 
 import java.math.BigDecimal;
-import java.sql.Blob;
-import java.time.LocalDateTime;
+import java.lang.String;
+import java.util.Arrays;
 
 public class ProductInfo {
-    private String title, content;
-    private Blob image;
-    private LocalDateTime publishTime;
+    private String title, content,publishTime;
+    private byte[] image;
     private int imageId, isCollect;
     private BigDecimal price;
 
@@ -16,7 +15,7 @@ public class ProductInfo {
         return "ProductInfo{" +
                 "title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", image=" + image +
+                ", image=" + Arrays.toString(image) +
                 ", publishTime=" + publishTime +
                 ", imageId=" + imageId +
                 ", isCollect=" + isCollect +
@@ -40,19 +39,19 @@ public class ProductInfo {
         this.content = content;
     }
 
-    public Blob getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(Blob image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
-    public LocalDateTime getPublishTime() {
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(LocalDateTime publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
 

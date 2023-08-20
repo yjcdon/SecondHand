@@ -3,6 +3,8 @@ package com.example.login.ButtonNavigation.ui.dashboard;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,11 +31,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.login.MySQL.Product;
+import com.example.login.ProductInfo;
 import com.example.login.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DashboardFragment extends Fragment {
     private ImageView imageViewUpload, imageViewDelete;
@@ -48,20 +55,10 @@ public class DashboardFragment extends Fragment {
 
     private static final int REQUEST_IMAGES_VIDEO_PERMISSION = 1, REQUEST_CAMERA_PERMISSION = 3, RESULT_CODE_SUCCESS = 100;
     private static final int REQUEST_CODE_ALBUM = 0, REQUEST_CODE_CAMERA = 2;
-    private boolean isUploadSuccess = false;
+    private boolean isImageUploadSuccess = false, isProductUploadSuccess = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-
-        if (imageData != null) {
-            Bitmap photo = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-            imageViewUpload.setImageBitmap(photo);
-            imageViewDelete.setVisibility(View.VISIBLE);
-            imageViewUpload.setVisibility(View.VISIBLE);
-        }else{
-            Toast.makeText(requireContext(), "照片无了", Toast.LENGTH_SHORT).show();
-        }
 
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
@@ -72,17 +69,16 @@ public class DashboardFragment extends Fragment {
         initView(view);
 
 
-
         btnUploadImage.setOnClickListener(view1 -> {
             myLinearLayout.startAnimation(slideInAnimation);
             myLinearLayout.setVisibility(View.VISIBLE);
             mask.setVisibility(View.VISIBLE);
-
         });
 
         mask.setOnClickListener(view16 -> {
             myLinearLayout.setVisibility(View.GONE);
             mask.setVisibility(View.GONE);
+
         });
 
         btnCamera.setOnClickListener(view15 -> {
@@ -96,11 +92,68 @@ public class DashboardFragment extends Fragment {
         btnCancel.setOnClickListener(view13 -> {
             myLinearLayout.setVisibility(View.GONE);
             mask.setVisibility(View.GONE);
+
         });
 
         imageViewDelete.setOnClickListener(view12 -> {
             imageViewUpload.setVisibility(View.GONE);
             imageViewDelete.setVisibility(View.GONE);
+
+        });
+
+        btnPublish.setOnClickListener(view17 -> {
+            ProductInfo productInfo = new ProductInfo();
+            Product product = new Product();
+
+            String titleText = title.getText().toString().trim();
+            if (titleText.isEmpty()) {
+                Toast.makeText(requireContext(), "请输入标题", Toast.LENGTH_SHORT).show();
+                return; // 返回，避免继续执行插入操作
+            }
+            productInfo.setTitle(titleText);
+
+            String contentText = content.getText().toString();
+            productInfo.setContent(contentText);
+
+            try {
+                BigDecimal priceText = new BigDecimal(price.getText().toString());
+                productInfo.setPrice(priceText);
+            } catch (NumberFormatException e) {
+                Toast.makeText(requireContext(), "请输入有效的价格", Toast.LENGTH_SHORT).show();
+                return; // 返回，避免继续执行插入操作
+            }
+
+
+            if (isImageUploadSuccess && imageData != null) {
+                // 将图片数据设置给imageText
+                Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                imageData = stream.toByteArray();
+                productInfo.setImage(imageData);
+            } else {
+                Toast.makeText(requireContext(), "请上传照片", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String publishTimeText = dateFormat.format(new Date());
+            productInfo.setPublishTime(publishTimeText);
+
+            productInfo.setIsCollect(0);
+
+            new Thread(() -> {
+                int result = product.insertProduct(productInfo);
+                requireActivity().runOnUiThread(()->{
+                    if (result != -1) {
+                        Toast.makeText(requireContext(), "发布成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), "发布失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }).start();
+
+
         });
 
     }
@@ -165,7 +218,7 @@ public class DashboardFragment extends Fragment {
             if (extras != null) {
                 Bitmap photo = (Bitmap) extras.get("data");
                 imageViewUpload.setImageBitmap(photo);
-                isUploadSuccess = true;
+                isImageUploadSuccess = true;
 
                 // 将Bitmap转换为字节数组
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -175,13 +228,13 @@ public class DashboardFragment extends Fragment {
                 // TODO: 调用insertImage函数插入图片，可以使用 getActivity() 获取包含该方法的Activity实例
 
             } else {
-                isUploadSuccess = false;
+                isImageUploadSuccess = false;
             }
 
         } else if (requestCode == REQUEST_CODE_ALBUM && resultCode == RESULT_OK && data != null) {
             Uri imageUri = data.getData();
             imageViewUpload.setImageURI(imageUri);
-            isUploadSuccess = true;
+            isImageUploadSuccess = true;
 
             try {
                 // 从Uri中获取图片数据
@@ -192,13 +245,13 @@ public class DashboardFragment extends Fragment {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                isUploadSuccess = false;
+                isImageUploadSuccess = false;
             }
         } else {
-            isUploadSuccess = false;
+            isImageUploadSuccess = false;
         }
 
-        if (isUploadSuccess) {
+        if (isImageUploadSuccess) {
             requireActivity().setResult(RESULT_CODE_SUCCESS, data);
             imageViewDelete.setVisibility(View.VISIBLE);
             myLinearLayout.setVisibility(View.INVISIBLE);
