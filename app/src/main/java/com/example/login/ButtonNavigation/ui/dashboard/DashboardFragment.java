@@ -1,6 +1,8 @@
 package com.example.login.ButtonNavigation.ui.dashboard;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -13,10 +15,12 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.login.R;
@@ -30,8 +34,8 @@ public class DashboardFragment extends Fragment {
     private LinearLayout myLinearLayout;
     private ConstraintLayout db_myConstrainLayout;
 
-    private static final int REQUEST_CODE_GALLERY = 0, RESULT_CODE_SUCCESS = 1, REQUEST_CODE_CAMERA = 2, REQUEST_CAMERA_PERMISSION = 3;
-
+    private static final int REQUEST_IMAGES_VIDEO_PERMISSION = 1, REQUEST_CAMERA_PERMISSION = 3, RESULT_CODE_SUCCESS = 100;
+    private static final int REQUEST_CODE_ALBUM = 0, REQUEST_CODE_CAMERA = 2;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,24 +53,25 @@ public class DashboardFragment extends Fragment {
             myLinearLayout.setVisibility(View.VISIBLE);
             mask.setVisibility(View.VISIBLE);
 
-            disableInputFields();
         });
 
-        db_myConstrainLayout.setOnClickListener(view12 -> {
+        mask.setOnClickListener(view16 -> {
             myLinearLayout.setVisibility(View.GONE);
             mask.setVisibility(View.GONE);
+        });
 
-            enableInputFields();
+        btnCamera.setOnClickListener(view15 -> {
+            openCamera();
+        });
+
+        btnAlbum.setOnClickListener(view14 -> {
+            openAlbum();
         });
 
         btnCancel.setOnClickListener(view13 -> {
             myLinearLayout.setVisibility(View.GONE);
             mask.setVisibility(View.GONE);
-            enableInputFields();
         });
-
-        btnAlbum.setOnClickListener(view14 -> openAlbum());
-
     }
 
     private void initView(View view) {
@@ -92,21 +97,31 @@ public class DashboardFragment extends Fragment {
         db_myConstrainLayout = view.findViewById(R.id.db_myConstraintLayout);
     }
 
-    private void disableInputFields() {
-        title.setFocusable(false);
-        content.setFocusable(false);
-        price.setFocusable(false);
-    }
-
-    private void enableInputFields() {
-        title.setFocusableInTouchMode(true);
-        content.setFocusableInTouchMode(true);
-        price.setFocusableInTouchMode(true);
-    }
-
     private void openAlbum() {
         Intent openAlbumIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         openAlbumIntent.setType("image/*");
-        startActivityForResult(openAlbumIntent, REQUEST_CODE_GALLERY);
+        startActivityForResult(openAlbumIntent, REQUEST_CODE_ALBUM);
+    }
+
+    private void openCamera() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        } else {
+            Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(openCameraIntent, REQUEST_CODE_CAMERA);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(requireContext(), "相机权限被拒绝", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
