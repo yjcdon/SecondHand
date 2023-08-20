@@ -1,10 +1,5 @@
 package com.example.login.MySQL;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
-import static java.security.AccessController.getContext;
-
-import android.widget.Toast;
-
 import com.example.login.ProductInfo;
 
 import java.sql.Connection;
@@ -69,7 +64,30 @@ public class Product implements InterfaceProduct {
         return -1;
     }
 
-    public int deleteProduct(ProductInfo productInfo){
+    public int deleteProductByImageId(int imageId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = getConnection();
+            String delete = "DELETE FROM " + TABLENAME + " WHERE imageId = ?";
+            pstmt = conn.prepareStatement(delete);
+            pstmt.setInt(1, imageId);
 
+            return pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            // 捕获数据库异常
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return -1;
     }
 }

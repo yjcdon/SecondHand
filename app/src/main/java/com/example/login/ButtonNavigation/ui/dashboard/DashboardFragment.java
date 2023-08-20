@@ -44,12 +44,11 @@ import java.util.Date;
 
 public class DashboardFragment extends Fragment {
     private ImageView imageViewUpload, imageViewDelete;
-    private Button btnUploadImage, btnPublish, btnCamera, btnAlbum, btnCancel;
+    private Button btnUploadImage, btnPublish, btnCamera, btnAlbum, btnCancel, btnDelete;
     private EditText title, content, price;
     private Animation slideInAnimation;
     private FrameLayout mask;
     private LinearLayout myLinearLayout;
-    private ConstraintLayout db_myConstrainLayout;
     private byte[] imageData;
 
 
@@ -144,7 +143,7 @@ public class DashboardFragment extends Fragment {
 
             new Thread(() -> {
                 int result = product.insertProduct(productInfo);
-                requireActivity().runOnUiThread(()->{
+                requireActivity().runOnUiThread(() -> {
                     if (result != -1) {
                         Toast.makeText(requireContext(), "发布成功", Toast.LENGTH_SHORT).show();
                     } else {
@@ -152,8 +151,22 @@ public class DashboardFragment extends Fragment {
                     }
                 });
             }).start();
+        });
 
+        btnDelete.setOnClickListener(view18 -> {
+            Product product=new Product();
+            int imageId=2;
 
+            new Thread(()->{
+                int result=product.deleteProductByImageId(imageId);
+                requireActivity().runOnUiThread(() -> {
+                    if (result != -1) {
+                        Toast.makeText(requireContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }).start();
         });
 
     }
@@ -167,6 +180,7 @@ public class DashboardFragment extends Fragment {
         btnCamera = view.findViewById(R.id.btnCamera);
         btnAlbum = view.findViewById(R.id.btnAlbum);
         btnCancel = view.findViewById(R.id.btnCancel);
+        btnDelete = view.findViewById(R.id.btnDelete);
 
         title = view.findViewById(R.id.title);
         content = view.findViewById(R.id.content);
@@ -178,7 +192,6 @@ public class DashboardFragment extends Fragment {
 
         myLinearLayout = view.findViewById(R.id.myLinearLayout);
 
-        db_myConstrainLayout = view.findViewById(R.id.db_myConstraintLayout);
     }
 
     private void openAlbum() {

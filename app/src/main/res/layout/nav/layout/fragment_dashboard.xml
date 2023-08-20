@@ -133,4 +133,13 @@
             android:text="取消"
             android:textSize="20sp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:text="删除商品信息"
+        app:layout_constraintEnd_toStartOf="@+id/btnUploadImage"
+        app:layout_constraintTop_toTopOf="@+id/btnUploadImage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

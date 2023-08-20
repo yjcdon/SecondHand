@@ -10,6 +10,6 @@ public interface InterfaceProduct {
 
     int insertProduct(ProductInfo productInfo);
 
-    int deleteProduct(ProductInfo productInfo);
+    int deleteProductByImageId(int imageId);
 
 }
