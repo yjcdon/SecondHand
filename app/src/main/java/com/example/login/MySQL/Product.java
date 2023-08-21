@@ -125,16 +125,16 @@ public class Product implements InterfaceProduct {
         return -1;
     }
 
-    public ProductInfo searchProductByImageId(int imageId) {
+    public ProductInfo searchProductByTitle(String title) {
         Connection conn = null;
         PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        ResultSet rs;
         ProductInfo productInfo = null;
         try {
             conn = getConnection();
-            String search = "select * from " + TABLENAME + " where imageId = ?";
+            String search = "select * from " + TABLENAME + " where title like ?";
             pstmt = conn.prepareStatement(search);
-            pstmt.setInt(1, imageId);
+            pstmt.setString(1, "%" + title + "%");
             rs = pstmt.executeQuery();
 
             if (rs.next()) {

@@ -7,7 +7,7 @@
     tools:context=".login.SignUp">
 
     <EditText
-        android:id="@+id/signUp_stuNum"
+        android:id="@+id/editTextStuNum"
         android:layout_width="276dp"
         android:layout_height="45dp"
         android:layout_marginTop="108dp"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/signUp_psw"
+        android:id="@+id/editTextPassword"
         android:layout_width="276dp"
         android:layout_height="46dp"
         android:layout_marginTop="84dp"
@@ -30,10 +30,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUp_stuNum" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextStuNum" />
 
     <Button
-        android:id="@+id/signUp_btn"
+        android:id="@+id/btnSignUp"
         android:layout_width="270dp"
         android:layout_height="49dp"
         android:layout_marginTop="92dp"
@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUp_psw" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
     <ImageView
         android:id="@+id/visibilityImageView"
@@ -49,8 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/signUp_psw"
-        app:layout_constraintEnd_toEndOf="@+id/signUp_psw"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextPassword"
+        app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
         app:srcCompat="@drawable/baseline_visibility_24" />
 
     <ImageView
@@ -58,12 +58,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="@id/signUp_psw"
-        app:layout_constraintEnd_toEndOf="@id/signUp_psw"
+        app:layout_constraintBottom_toBottomOf="@id/editTextPassword"
+        app:layout_constraintEnd_toEndOf="@id/editTextPassword"
         app:srcCompat="@drawable/baseline_visibility_off_24" />
 
     <EditText
-        android:id="@+id/signUp_psw2"
+        android:id="@+id/editTextPassword2"
         android:layout_width="276dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -73,10 +73,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUp_psw" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
     <EditText
-        android:id="@+id/signUp_phone"
+        android:id="@+id/editTextPhone"
         android:layout_width="276dp"
         android:layout_height="45dp"
         android:layout_marginTop="20dp"
@@ -85,6 +85,6 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUp_stuNum" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextStuNum" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

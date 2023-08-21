@@ -8,11 +8,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
 public class DashboardFragment extends Fragment {
@@ -50,9 +49,8 @@ public class DashboardFragment extends Fragment {
     private FrameLayout mask;
     private LinearLayout myLinearLayout;
     private byte[] imageData;
-    private static final int REQUEST_CAMERA_PERMISSION = 3;
+    private static final int REQUEST_CODE_ALBUM = 0, REQUEST_IMAGES_VIDEO_PERMISSION = 1, REQUEST_CODE_CAMERA = 2, REQUEST_CAMERA_PERMISSION = 3;
     private static final int RESULT_CODE_SUCCESS = 100;
-    private static final int REQUEST_CODE_ALBUM = 0, REQUEST_CODE_CAMERA = 2;
     private boolean isImageUploadSuccess = false, isProductUploadSuccess = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -123,7 +121,6 @@ public class DashboardFragment extends Fragment {
                 return;
             }
 
-
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String publishTimeText = dateFormat.format(new Date());
             productInfo.setPublishTime(publishTimeText);
@@ -160,9 +157,9 @@ public class DashboardFragment extends Fragment {
 
         btnSearch.setOnClickListener(view19 -> {
             Product product = new Product();
-            int imageId = 1;
+            String searchTitle = "i";
             new Thread(() -> {
-                ProductInfo productInfo = product.searchProductByImageId(imageId);
+                ProductInfo productInfo = product.searchProductByTitle(searchTitle);
                 requireActivity().runOnUiThread(() -> {
                     title.setText(productInfo.getTitle());
                     price.setText(productInfo.getPrice().toString());
@@ -174,8 +171,9 @@ public class DashboardFragment extends Fragment {
         btnUpdate.setOnClickListener(view110 -> {
             Product product = new Product();
             int imageId = 1;
+            String searchTitle = "i";
             new Thread(() -> {
-                ProductInfo productInfo = product.searchProductByImageId(imageId);
+                ProductInfo productInfo = product.searchProductByTitle(searchTitle);
                 String priceValue = price.getText().toString();
                 if (!priceValue.isEmpty()) {
                     productInfo.setPrice(new BigDecimal(priceValue));
@@ -225,9 +223,14 @@ public class DashboardFragment extends Fragment {
     }
 
     private void openAlbum() {
-        Intent openAlbumIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        openAlbumIntent.setType("image/*");
-        startActivityForResult(openAlbumIntent, REQUEST_CODE_ALBUM);
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_IMAGES_VIDEO_PERMISSION);
+        } else {
+            Intent openAlbumIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            openAlbumIntent.setType("image/*");
+            startActivityForResult(openAlbumIntent, REQUEST_CODE_ALBUM);
+        }
+
     }
 
     private void openCamera() {
@@ -248,6 +251,14 @@ public class DashboardFragment extends Fragment {
                 openCamera();
             } else {
                 Toast.makeText(requireContext(), "相机权限被拒绝", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (requestCode == REQUEST_IMAGES_VIDEO_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openAlbum();
+            } else {
+                Toast.makeText(requireContext(), "读取内存权限被拒绝", Toast.LENGTH_SHORT).show();
             }
         }
     }

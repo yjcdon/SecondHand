@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login.SignIn">
+    tools:context=".login.LogIn">
 
     <EditText
-        android:id="@+id/signIn_stuNum"
+        android:id="@+id/editTextStuNum"
         android:layout_width="230dp"
         android:layout_height="50dp"
         android:layout_marginTop="80dp"
@@ -21,7 +21,7 @@
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/signIn_password"
+        android:id="@+id/editTextPassword"
         android:layout_width="230dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
@@ -31,10 +31,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/signIn_stuNum" />
+        app:layout_constraintTop_toBottomOf="@id/editTextStuNum" />
 
     <Button
-        android:id="@+id/loginBtn"
+        android:id="@+id/btnLogin"
         android:layout_width="230dp"
         android:layout_height="50dp"
         android:layout_marginTop="84dp"
@@ -44,22 +44,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/signIn_password" />
+        app:layout_constraintTop_toBottomOf="@id/editTextPassword" />
 
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="30dp"
         android:layout_height="50dp"
-        app:layout_constraintRight_toLeftOf="@id/signIn_stuNum"
-        app:layout_constraintTop_toTopOf="@id/signIn_stuNum"
+        app:layout_constraintRight_toLeftOf="@id/editTextStuNum"
+        app:layout_constraintTop_toTopOf="@id/editTextStuNum"
         app:srcCompat="@drawable/baseline_person_outline_24" />
 
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="30dp"
         android:layout_height="50dp"
-        app:layout_constraintRight_toLeftOf="@id/signIn_password"
-        app:layout_constraintTop_toTopOf="@id/signIn_password"
+        app:layout_constraintRight_toLeftOf="@id/editTextPassword"
+        app:layout_constraintTop_toTopOf="@id/editTextPassword"
         app:srcCompat="@drawable/baseline_lock_24" />
 
     <ImageView
@@ -67,8 +67,8 @@
         android:layout_width="34dp"
         android:layout_height="32dp"
         android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="@id/signIn_password"
-        app:layout_constraintRight_toRightOf="@id/signIn_password"
+        app:layout_constraintBottom_toBottomOf="@id/editTextPassword"
+        app:layout_constraintRight_toRightOf="@id/editTextPassword"
         app:srcCompat="@drawable/baseline_visibility_off_24" />
 
     <ImageView
@@ -77,32 +77,32 @@
         android:layout_height="32dp"
         android:layout_marginBottom="10dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/signIn_password"
-        app:layout_constraintRight_toRightOf="@id/signIn_password"
+        app:layout_constraintBottom_toBottomOf="@id/editTextPassword"
+        app:layout_constraintRight_toRightOf="@id/editTextPassword"
         app:srcCompat="@drawable/baseline_visibility_24"
         tools:ignore="MissingConstraints" />
 
     <CheckBox
-        android:id="@+id/rememberMe"
+        android:id="@+id/checkBoxRememberMe"
         android:layout_width="75dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:text="记住我"
-        app:layout_constraintStart_toEndOf="@+id/signIn_password"
-        app:layout_constraintTop_toTopOf="@+id/signIn_password" />
+        app:layout_constraintStart_toEndOf="@+id/editTextPassword"
+        app:layout_constraintTop_toTopOf="@+id/editTextPassword" />
 
     <Button
-        android:id="@+id/signUpBtn"
+        android:id="@+id/btnSignUp"
         android:layout_width="80dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:background="@color/white"
         android:text="注册"
-        app:layout_constraintRight_toRightOf="@id/signIn_password"
-        app:layout_constraintTop_toBottomOf="@+id/signIn_password" />
+        app:layout_constraintRight_toRightOf="@id/editTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
     <Button
-        android:id="@+id/forgetPswBtn"
+        android:id="@+id/btnForgetPsw"
         android:layout_width="110dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
@@ -110,7 +110,7 @@
         android:background="@color/white"
         android:text="忘记密码"
         android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/signUpBtn"
-        app:layout_constraintTop_toBottomOf="@+id/signIn_password" />
+        app:layout_constraintEnd_toStartOf="@+id/btnSignUp"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

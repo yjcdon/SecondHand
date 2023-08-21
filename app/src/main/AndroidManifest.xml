@@ -36,7 +36,7 @@
             android:exported="false"
             android:label="注册" />
         <activity
-            android:name=".login.SignIn"
+            android:name=".login.LogIn"
             android:exported="true"
             android:label="GUET二手交易平台">
             <intent-filter>

@@ -16,22 +16,22 @@ import com.example.login.StudentInfo;
 import java.util.Objects;
 
 public class ForgetPassword extends AppCompatActivity {
-    private EditText phoneNum, stuNum, newPsw1, newPsw2;
-    private Button resetBtn;
+    private EditText editTextPhone, editTextStuNum, editTextNewPsw, editTextNewPsw2;
+    private Button btnResetPsw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.forget_password);
+        setContentView(R.layout.activity_forget_password);
 
         initView();
         limitNumberLength();
 
-        resetBtn.setOnClickListener(view -> {
-            String psw1 = newPsw1.getText().toString().trim();
-            String psw2 = newPsw2.getText().toString().trim();
-            String phoneText = phoneNum.getText().toString().trim();
-            String stuNumText = stuNum.getText().toString().trim();
+        btnResetPsw.setOnClickListener(view -> {
+            String psw1 = editTextNewPsw.getText().toString().trim();
+            String psw2 = editTextNewPsw2.getText().toString().trim();
+            String phoneText = editTextPhone.getText().toString().trim();
+            String stuNumText = editTextStuNum.getText().toString().trim();
 
 //            手机号输入要有其他限制
             if (Objects.equals(stuNumText, "")) {
@@ -51,7 +51,7 @@ public class ForgetPassword extends AppCompatActivity {
                     account.updatePswByStuNumAndPhone(studentInfo);
                     runOnUiThread(() -> {
                         Toast.makeText(ForgetPassword.this, "重置密码成功!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ForgetPassword.this, SignIn.class);
+                        Intent intent = new Intent(ForgetPassword.this, LogIn.class);
                         intent.putExtra("resetPsw", true);
                         startActivity(intent);
                     });
@@ -63,17 +63,17 @@ public class ForgetPassword extends AppCompatActivity {
 
     private void limitNumberLength() {
         //        设置最多输入6位验证码
-        stuNum.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+        editTextStuNum.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
         //        11位手机号
-        phoneNum.setFilters(new InputFilter[]{new InputFilter.LengthFilter(11)});
+        editTextPhone.setFilters(new InputFilter[]{new InputFilter.LengthFilter(11)});
     }
 
     private void initView() {
-        phoneNum = findViewById(R.id.phoneNum);
-        stuNum = findViewById(R.id.stuNum);
-        newPsw1 = findViewById(R.id.newPsw1);
-        newPsw2 = findViewById(R.id.newPsw2);
-        resetBtn = findViewById(R.id.resetPswBtn);
+        editTextPhone = findViewById(R.id.editTextPhone);
+        editTextStuNum = findViewById(R.id.editTextStuNum);
+        editTextNewPsw = findViewById(R.id.editTextNewPsw);
+        editTextNewPsw2 = findViewById(R.id.editTextNewPsw2);
+        btnResetPsw = findViewById(R.id.btnResetPsw);
     }
 
 }
