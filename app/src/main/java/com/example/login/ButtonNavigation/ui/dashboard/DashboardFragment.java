@@ -3,7 +3,6 @@ package com.example.login.ButtonNavigation.ui.dashboard;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -40,25 +39,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 public class DashboardFragment extends Fragment {
     private ImageView imageViewUpload, imageViewDelete;
-    private Button btnUploadImage, btnPublish, btnCamera, btnAlbum, btnCancel, btnDelete;
+    private Button btnUploadImage, btnPublish, btnCamera, btnAlbum, btnCancel, btnDelete, btnSearch, btnUpdate;
     private EditText title, content, price;
     private Animation slideInAnimation;
     private FrameLayout mask;
     private LinearLayout myLinearLayout;
     private byte[] imageData;
-
-
-    private static final int REQUEST_IMAGES_VIDEO_PERMISSION = 1, REQUEST_CAMERA_PERMISSION = 3, RESULT_CODE_SUCCESS = 100;
+    private static final int REQUEST_CAMERA_PERMISSION = 3;
+    private static final int RESULT_CODE_SUCCESS = 100;
     private static final int REQUEST_CODE_ALBUM = 0, REQUEST_CODE_CAMERA = 2;
     private boolean isImageUploadSuccess = false, isProductUploadSuccess = false;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
@@ -66,7 +63,6 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-
 
         btnUploadImage.setOnClickListener(view1 -> {
             myLinearLayout.startAnimation(slideInAnimation);
@@ -77,7 +73,6 @@ public class DashboardFragment extends Fragment {
         mask.setOnClickListener(view16 -> {
             myLinearLayout.setVisibility(View.GONE);
             mask.setVisibility(View.GONE);
-
         });
 
         btnCamera.setOnClickListener(view15 -> {
@@ -91,13 +86,11 @@ public class DashboardFragment extends Fragment {
         btnCancel.setOnClickListener(view13 -> {
             myLinearLayout.setVisibility(View.GONE);
             mask.setVisibility(View.GONE);
-
         });
 
         imageViewDelete.setOnClickListener(view12 -> {
             imageViewUpload.setVisibility(View.GONE);
             imageViewDelete.setVisibility(View.GONE);
-
         });
 
         btnPublish.setOnClickListener(view17 -> {
@@ -107,7 +100,7 @@ public class DashboardFragment extends Fragment {
             String titleText = title.getText().toString().trim();
             if (titleText.isEmpty()) {
                 Toast.makeText(requireContext(), "请输入标题", Toast.LENGTH_SHORT).show();
-                return; // 返回，避免继续执行插入操作
+                return; // 避免继续执行插入操作
             }
             productInfo.setTitle(titleText);
 
@@ -119,21 +112,17 @@ public class DashboardFragment extends Fragment {
                 productInfo.setPrice(priceText);
             } catch (NumberFormatException e) {
                 Toast.makeText(requireContext(), "请输入有效的价格", Toast.LENGTH_SHORT).show();
-                return; // 返回，避免继续执行插入操作
+                return;
             }
 
-
             if (isImageUploadSuccess && imageData != null) {
-                // 将图片数据设置给imageText
-                Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                imageData = stream.toByteArray();
+//                imageData在onActivityResult已经设置好了,所以直接set就行
                 productInfo.setImage(imageData);
             } else {
                 Toast.makeText(requireContext(), "请上传照片", Toast.LENGTH_SHORT).show();
                 return;
             }
+
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String publishTimeText = dateFormat.format(new Date());
@@ -154,16 +143,55 @@ public class DashboardFragment extends Fragment {
         });
 
         btnDelete.setOnClickListener(view18 -> {
-            Product product=new Product();
-            int imageId=2;
+            Product product = new Product();
+            int imageId = 2;
 
-            new Thread(()->{
-                int result=product.deleteProductByImageId(imageId);
+            new Thread(() -> {
+                int result = product.deleteProductByImageId(imageId);
                 requireActivity().runOnUiThread(() -> {
                     if (result != -1) {
                         Toast.makeText(requireContext(), "删除成功", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(requireContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }).start();
+        });
+
+        btnSearch.setOnClickListener(view19 -> {
+            Product product = new Product();
+            int imageId = 1;
+            new Thread(() -> {
+                ProductInfo productInfo = product.searchProductByImageId(imageId);
+                requireActivity().runOnUiThread(() -> {
+                    title.setText(productInfo.getTitle());
+                    price.setText(productInfo.getPrice().toString());
+                });
+
+            }).start();
+        });
+
+        btnUpdate.setOnClickListener(view110 -> {
+            Product product = new Product();
+            int imageId = 1;
+            new Thread(() -> {
+                ProductInfo productInfo = product.searchProductByImageId(imageId);
+                String priceValue = price.getText().toString();
+                if (!priceValue.isEmpty()) {
+                    productInfo.setPrice(new BigDecimal(priceValue));
+                }
+                productInfo.setTitle(title.getText().toString());
+
+                if (isImageUploadSuccess && imageData != null) {
+                    productInfo.setImage(imageData);
+                }
+
+                int result = product.updateProductByImageId(productInfo, imageId);
+                requireActivity().runOnUiThread(() -> {
+                    if (result != -1) {
+                        Toast.makeText(requireContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), "修改失败", Toast.LENGTH_SHORT).show();
                     }
                 });
             }).start();
@@ -181,6 +209,8 @@ public class DashboardFragment extends Fragment {
         btnAlbum = view.findViewById(R.id.btnAlbum);
         btnCancel = view.findViewById(R.id.btnCancel);
         btnDelete = view.findViewById(R.id.btnDelete);
+        btnSearch = view.findViewById(R.id.btnSearch);
+        btnUpdate = view.findViewById(R.id.btnUpdate);
 
         title = view.findViewById(R.id.title);
         content = view.findViewById(R.id.content);
@@ -233,12 +263,10 @@ public class DashboardFragment extends Fragment {
                 imageViewUpload.setImageBitmap(photo);
                 isImageUploadSuccess = true;
 
-                // 将Bitmap转换为字节数组
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 imageData = stream.toByteArray();
                 mask.setVisibility(View.GONE);
-                // TODO: 调用insertImage函数插入图片，可以使用 getActivity() 获取包含该方法的Activity实例
 
             } else {
                 isImageUploadSuccess = false;
@@ -250,11 +278,9 @@ public class DashboardFragment extends Fragment {
             isImageUploadSuccess = true;
 
             try {
-                // 从Uri中获取图片数据
                 InputStream inputStream = requireActivity().getContentResolver().openInputStream(imageUri);
                 imageData = getBytesFromInputStream(inputStream);
                 mask.setVisibility(View.GONE);
-                // TODO: 执行进一步的操作，如上传图片或其他处理
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -284,5 +310,4 @@ public class DashboardFragment extends Fragment {
         buffer.flush();
         return buffer.toByteArray();
     }
-
 }

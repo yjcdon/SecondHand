@@ -12,4 +12,8 @@ public interface InterfaceProduct {
 
     int deleteProductByImageId(int imageId);
 
+    ProductInfo searchProductByImageId(int imageId);
+
+    int updateProductByImageId(ProductInfo productInfo,int imageId);
+
 }

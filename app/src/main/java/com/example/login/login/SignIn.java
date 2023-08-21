@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -23,7 +25,7 @@ import com.example.login.StudentInfo;
 public class SignIn extends AppCompatActivity {
     private ImageView visibilityOff, visibility;
     private EditText stuNum, password;
-    private Button loginBtn, signUpBtn,forgetPswBtn;
+    private Button loginBtn, signUpBtn, forgetPswBtn;
     private CheckBox rememberMe;
 
     private static final String KEY_ACCOUNT = "account", KEY_PASSWORD = "password", PREF_NAME = "myPref";
@@ -68,6 +70,8 @@ public class SignIn extends AppCompatActivity {
         loginBtn.setOnClickListener(view -> {
             String stuNumText = stuNum.getText().toString().trim();
             String passwordText = password.getText().toString().trim();
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
             if (stuNumText.isEmpty() || passwordText.isEmpty()) {
                 Toast.makeText(SignIn.this, "请输入账号和密码!", Toast.LENGTH_SHORT).show();
@@ -81,15 +85,20 @@ public class SignIn extends AppCompatActivity {
                 Account account = new Account();
                 StudentInfo studentInfo2 = account.searchByStuNum(studentInfo.getStuNum());
                 runOnUiThread(() -> {
-                    if (studentInfo2 == null) {
-                        Toast.makeText(SignIn.this, "学号错误!", Toast.LENGTH_SHORT).show();
-                    } else if (!passwordText.equals(studentInfo2.getPassword())) {
-                        Toast.makeText(SignIn.this, "密码错误!", Toast.LENGTH_SHORT).show();
+                    if (networkInfo == null || !networkInfo.isConnected()) {
+                        Toast.makeText(SignIn.this, "请连接网络", Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent intent = new Intent(SignIn.this, Main.class);
-                        startActivity(intent);
-                        Toast.makeText(SignIn.this, "登陆成功!", Toast.LENGTH_SHORT).show();
+                        if (studentInfo2 == null) {
+                            Toast.makeText(SignIn.this, "学号错误!", Toast.LENGTH_SHORT).show();
+                        } else if (!passwordText.equals(studentInfo2.getPassword())) {
+                            Toast.makeText(SignIn.this, "密码错误!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent intent = new Intent(SignIn.this, Main.class);
+                            startActivity(intent);
+                            Toast.makeText(SignIn.this, "登陆成功!", Toast.LENGTH_SHORT).show();
+                        }
                     }
+
                 });
 
             }).start();

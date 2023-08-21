@@ -5,6 +5,7 @@ import com.example.login.ProductInfo;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Product implements InterfaceProduct {
@@ -14,7 +15,6 @@ public class Product implements InterfaceProduct {
     private final static String PASSWORD = "AnZhuo666@";
     private String TABLENAME = "product";
 
-    // 建立数据库连接
     private static Connection getConnection() throws SQLException {
         try {
             Class.forName(DRIVER);
@@ -24,7 +24,6 @@ public class Product implements InterfaceProduct {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
-    // 关闭数据库连接
     private static void closeConnection(Connection conn) throws SQLException {
         if (conn != null) {
             conn.close();
@@ -90,4 +89,79 @@ public class Product implements InterfaceProduct {
         }
         return -1;
     }
+
+    @Override
+    public int updateProductByImageId(ProductInfo productInfo, int imageId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = getConnection();
+            String update = "update " + TABLENAME +
+                    " set title=?,image=?,content=?,publishTime=?,isCollect=?,price=? where imageId=?";
+            pstmt = conn.prepareStatement(update);
+            pstmt.setString(1, productInfo.getTitle());
+            pstmt.setBytes(2, productInfo.getImage());
+            pstmt.setString(3, productInfo.getContent());
+            pstmt.setString(4, productInfo.getPublishTime());
+            pstmt.setInt(5, productInfo.getIsCollect());
+            pstmt.setBigDecimal(6, productInfo.getPrice());
+            pstmt.setInt(7, imageId);
+
+            return pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            // 捕获数据库异常
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return -1;
+    }
+
+    public ProductInfo searchProductByImageId(int imageId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        ProductInfo productInfo = null;
+        try {
+            conn = getConnection();
+            String search = "select * from " + TABLENAME + " where imageId = ?";
+            pstmt = conn.prepareStatement(search);
+            pstmt.setInt(1, imageId);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                productInfo = new ProductInfo();
+                productInfo.setTitle(rs.getString("title"));
+                productInfo.setImage(rs.getBytes("image"));
+                productInfo.setContent(rs.getString("content"));
+                productInfo.setPublishTime(rs.getString("publishTime"));
+                productInfo.setImageId(rs.getInt("imageId"));
+                productInfo.setIsCollect(rs.getInt("isCollect"));
+                productInfo.setPrice(rs.getBigDecimal("price"));
+            }
+        } catch (SQLException e) {
+            // 捕获数据库异常
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return productInfo;
+    }
+
+
 }
