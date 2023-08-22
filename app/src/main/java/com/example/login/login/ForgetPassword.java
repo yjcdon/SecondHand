@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.example.login.MySQL.Account;
 import com.example.login.R;
-import com.example.login.StudentInfo;
+import com.example.login.TableInfo.StudentInfo;
 
 import java.util.Objects;
 
@@ -28,13 +28,13 @@ public class ForgetPassword extends AppCompatActivity {
         limitNumberLength();
 
         btnResetPsw.setOnClickListener(view -> {
+            int stuNumText = Integer.parseInt(editTextStuNum.getText().toString().trim());
+            String phoneText = editTextPhone.getText().toString().trim();
             String psw1 = editTextNewPsw.getText().toString().trim();
             String psw2 = editTextNewPsw2.getText().toString().trim();
-            String phoneText = editTextPhone.getText().toString().trim();
-            int stuNumText = Integer.parseInt(editTextStuNum.getText().toString().trim());
 
 //            手机号输入要有其他限制
-            if (Objects.equals(stuNumText, "")) {
+            if (String.valueOf(stuNumText).isEmpty()) {
                 Toast.makeText(ForgetPassword.this, "请输入学号!", Toast.LENGTH_SHORT).show();
             } else if (phoneText.isEmpty()) {
                 Toast.makeText(ForgetPassword.this, "请输入手机号!", Toast.LENGTH_SHORT).show();

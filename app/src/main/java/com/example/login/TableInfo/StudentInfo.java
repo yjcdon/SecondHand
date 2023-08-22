@@ -1,11 +1,11 @@
-package com.example.login;
+package com.example.login.TableInfo;
 
 /*
 这是保存输入数据的类
  */
 
 public class StudentInfo {
-    private String  password, phone;
+    private String password, phone;
     private int stuNum;
 
     @Override

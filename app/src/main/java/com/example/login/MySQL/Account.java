@@ -1,13 +1,12 @@
 package com.example.login.MySQL;
 
-import com.example.login.StudentInfo;
+import com.example.login.TableInfo.StudentInfo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class Account implements InterfaceAccount {
     private final static String DRIVER = "com.mysql.jdbc.Driver";

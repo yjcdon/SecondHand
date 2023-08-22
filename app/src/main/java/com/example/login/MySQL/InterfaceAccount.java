@@ -1,8 +1,6 @@
 package com.example.login.MySQL;
 
-import com.example.login.StudentInfo;
-
-import java.util.ArrayList;
+import com.example.login.TableInfo.StudentInfo;
 
 public interface InterfaceAccount {
     void insertData(StudentInfo studentInfo);

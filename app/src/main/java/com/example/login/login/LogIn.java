@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.example.login.MySQL.Account;
 import com.example.login.R;
 import com.example.login.ButtonNavigation.Main;
-import com.example.login.StudentInfo;
+import com.example.login.TableInfo.StudentInfo;
 
 public class LogIn extends AppCompatActivity {
     private ImageView visibilityOff, visibility;
@@ -28,6 +28,7 @@ public class LogIn extends AppCompatActivity {
     private CheckBox checkBoxRememberMe;
     private static final String KEY_ACCOUNT = "account", KEY_PASSWORD = "password", PREF_NAME = "myPref";
     private SharedPreferences sharedPreferences;
+    //这个stuNum比较特殊,它要作为参数通过get set传到其他的类里
     private static int stuNum;
 
 
@@ -69,6 +70,8 @@ public class LogIn extends AppCompatActivity {
         btnLogin.setOnClickListener(view -> {
             int stuNumText = Integer.parseInt(editTextStuNum.getText().toString().trim());
             String passwordText = editTextPassword.getText().toString().trim();
+
+            //判断网络是否连接的变量
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
@@ -77,9 +80,10 @@ public class LogIn extends AppCompatActivity {
                 return;
             }
 
+//            new两个对象,通过get来获取学号密码并进行对比,以第二个对象为准
             StudentInfo studentInfo = new StudentInfo();
             studentInfo.setStuNum(stuNumText);
-            LogIn.setStuNumByLogin(stuNumText);
+            LogIn.setStuNumInLogin(stuNumText);
 
             new Thread(() -> {
                 Account account = new Account();
@@ -88,7 +92,7 @@ public class LogIn extends AppCompatActivity {
                     if (networkInfo == null || !networkInfo.isConnected()) {
                         Toast.makeText(LogIn.this, "请连接网络", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (studentInfo2 == null) {
+                        if (stuNumText != studentInfo2.getStuNum()) {
                             Toast.makeText(LogIn.this, "学号错误!", Toast.LENGTH_SHORT).show();
                         } else if (!passwordText.equals(studentInfo2.getPassword())) {
                             Toast.makeText(LogIn.this, "密码错误!", Toast.LENGTH_SHORT).show();
@@ -98,7 +102,6 @@ public class LogIn extends AppCompatActivity {
                             Toast.makeText(LogIn.this, "登陆成功!", Toast.LENGTH_SHORT).show();
                         }
                     }
-
                 });
 
             }).start();
@@ -149,7 +152,6 @@ public class LogIn extends AppCompatActivity {
         editTextStuNum = findViewById(R.id.editTextStuNum);
         checkBoxRememberMe = findViewById(R.id.checkBoxRememberMe);
         btnForgetPsw = findViewById(R.id.btnForgetPsw);
-        // 初始化SharedPreferences实例
         sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
     }
 
@@ -184,7 +186,7 @@ public class LogIn extends AppCompatActivity {
         return stuNum;
     }
 
-    public static void setStuNumByLogin(int value) {
+    public static void setStuNumInLogin(int value) {
         stuNum = value;
     }
 

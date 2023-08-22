@@ -1,4 +1,4 @@
-package com.example.login;
+package com.example.login.TableInfo;
 
 import java.math.BigDecimal;
 import java.lang.String;
@@ -7,18 +7,7 @@ import java.util.Arrays;
 public class ProductInfo {
     private String title, content, publishTime;
     private byte[] image;
-    private int imageId;
-    private int isCollect;
-
-    public int getStuNum() {
-        return stuNum;
-    }
-
-    public void setStuNum(int stuNum) {
-        this.stuNum = stuNum;
-    }
-
-    private int stuNum;
+    private int isCollect, stuNum, imageId;
     private BigDecimal price;
 
     @Override
@@ -33,6 +22,14 @@ public class ProductInfo {
                 ", stuNum=" + stuNum +
                 ", price=" + price +
                 '}';
+    }
+
+    public int getStuNum() {
+        return stuNum;
+    }
+
+    public void setStuNum(int stuNum) {
+        this.stuNum = stuNum;
     }
 
     public String getTitle() {

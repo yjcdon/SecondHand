@@ -1,6 +1,6 @@
 package com.example.login.MySQL;
 
-import com.example.login.ProductInfo;
+import com.example.login.TableInfo.ProductInfo;
 
 import java.util.List;
 

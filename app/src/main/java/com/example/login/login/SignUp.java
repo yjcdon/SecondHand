@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.example.login.MySQL.Account;
 import com.example.login.R;
-import com.example.login.StudentInfo;
+import com.example.login.TableInfo.StudentInfo;
 
 public class SignUp extends AppCompatActivity {
     private ImageView visibility, visibilityOff;
@@ -104,8 +104,6 @@ public class SignUp extends AppCompatActivity {
                     Toast.makeText(SignUp.this, "注册成功!", Toast.LENGTH_LONG).show();
                 });
             }).start();
-
-
         }
     }
 

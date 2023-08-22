@@ -11,9 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +29,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.login.MySQL.Product;
-import com.example.login.ProductInfo;
+import com.example.login.TableInfo.ProductInfo;
 import com.example.login.R;
 import com.example.login.login.LogIn;
 
@@ -59,6 +55,7 @@ public class DashboardFragment extends Fragment {
     private boolean isImageUploadSuccess = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        这个函数就是当我进行返回操作时,不会切换fragment,就能保存数据了
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -85,6 +82,7 @@ public class DashboardFragment extends Fragment {
         mask.setOnClickListener(view16 -> {
             myLinearLayout.setVisibility(View.GONE);
             mask.setVisibility(View.GONE);
+            mask.setAlpha(0.5f);
             imageViewRawImage.setVisibility(View.GONE);
         });
 
@@ -125,6 +123,7 @@ public class DashboardFragment extends Fragment {
         btnPublish.setOnClickListener(view17 -> {
             ProductInfo productInfo = new ProductInfo();
             Product product = new Product();
+//          先把数据都set进对象productInfo中,再用product来调用插入函数,productInfo做参数
 
             String titleText = title.getText().toString().trim();
             if (titleText.isEmpty()) {
@@ -152,6 +151,7 @@ public class DashboardFragment extends Fragment {
                 return;
             }
 
+//            获取手机的时间并格式化
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String publishTimeText = dateFormat.format(new Date());
             productInfo.setPublishTime(publishTimeText);
@@ -167,6 +167,7 @@ public class DashboardFragment extends Fragment {
                     if (result != -1) {
                         Toast.makeText(requireContext(), "发布成功", Toast.LENGTH_SHORT).show();
 
+//                      把之前输入的数据都清空,防止重复发布
                         title.setText("");
                         content.setText("");
                         price.setText("");
@@ -179,7 +180,6 @@ public class DashboardFragment extends Fragment {
                 });
             }).start();
         });
-
     }
 
     private void initView(View view) {
@@ -206,7 +206,18 @@ public class DashboardFragment extends Fragment {
     }
 
 
+    private void openCamera() {
+//        先申请权限,成功才能打开
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        } else {
+            Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(openCameraIntent, REQUEST_CODE_CAMERA);
+        }
+    }
+
     private void openAlbum() {
+//                                                                               这里的权限只需要一个就行
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_IMAGES_VIDEO_PERMISSION);
         } else {
@@ -217,15 +228,7 @@ public class DashboardFragment extends Fragment {
 
     }
 
-    private void openCamera() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-        } else {
-            Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(openCameraIntent, REQUEST_CODE_CAMERA);
-        }
-    }
-
+    //    用于申请权限的回调函数
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -247,6 +250,7 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    //    回调函数,用于判断是否成功选择好了照片
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -296,6 +300,7 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    //    把输入流转换为字节数组
     private byte[] getBytesFromInputStream(InputStream inputStream) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         byte[] data = new byte[4096];
