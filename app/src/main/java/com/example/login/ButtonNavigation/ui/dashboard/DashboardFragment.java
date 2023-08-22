@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -57,6 +59,15 @@ public class DashboardFragment extends Fragment {
     private boolean isImageUploadSuccess = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                mask.setVisibility(View.GONE);
+                mask.setAlpha(0.5f);
+                imageViewRawImage.setVisibility(View.GONE);
+                myLinearLayout.setVisibility(View.GONE);
+            }
+        });
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
@@ -193,6 +204,7 @@ public class DashboardFragment extends Fragment {
         myLinearLayout = view.findViewById(R.id.myLinearLayout);
 
     }
+
 
     private void openAlbum() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
