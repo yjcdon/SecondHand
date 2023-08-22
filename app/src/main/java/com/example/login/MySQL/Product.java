@@ -65,7 +65,7 @@ public class Product implements InterfaceProduct {
         return -1;
     }
 
-    public int deleteProductInfoByImageId(int imageId) {
+    public int deleteProductInfo(int imageId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         try {
@@ -93,13 +93,13 @@ public class Product implements InterfaceProduct {
     }
 
     @Override
-    public int updateProductInfoByImageId(ProductInfo productInfo, int imageId) {
+    public int updateProductInfo(ProductInfo productInfo, int imageId, int stuNum) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         try {
             conn = getConnection();
             String update = "update " + TABLENAME +
-                    " set title=?,image=?,content=?,publishTime=?,isCollect=?,price=? where imageId=?";
+                    " set title=?,image=?,content=?,publishTime=?,isCollect=?,price=? where imageId=? and stuNum=?";
             pstmt = conn.prepareStatement(update);
             pstmt.setString(1, productInfo.getTitle());
             pstmt.setBytes(2, productInfo.getImage());
@@ -108,6 +108,7 @@ public class Product implements InterfaceProduct {
             pstmt.setInt(5, productInfo.getIsCollect());
             pstmt.setBigDecimal(6, productInfo.getPrice());
             pstmt.setInt(7, imageId);
+            pstmt.setInt(8, stuNum);
 
             return pstmt.executeUpdate();
 
@@ -127,11 +128,11 @@ public class Product implements InterfaceProduct {
         return -1;
     }
 
-    public ProductInfo searchProductInfo(String title) {
+    public List<ProductInfo> searchProductInfo(String title) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs;
-        ProductInfo productInfo = null;
+        List<ProductInfo> productList = new ArrayList<>();
         try {
             conn = getConnection();
             String search = "select * from " + TABLENAME + " where title like ?";
@@ -139,8 +140,8 @@ public class Product implements InterfaceProduct {
             pstmt.setString(1, "%" + title + "%");
             rs = pstmt.executeQuery();
 
-            if (rs.next()) {
-                productInfo = new ProductInfo();
+            while (rs.next()) {
+                ProductInfo productInfo = new ProductInfo();
                 productInfo.setTitle(rs.getString("title"));
                 productInfo.setImage(rs.getBytes("image"));
                 productInfo.setContent(rs.getString("content"));
@@ -149,6 +150,8 @@ public class Product implements InterfaceProduct {
                 productInfo.setIsCollect(rs.getInt("isCollect"));
                 productInfo.setPrice(rs.getBigDecimal("price"));
                 productInfo.setStuNum(rs.getInt("stuNum"));
+
+                productList.add(productInfo);
             }
         } catch (SQLException e) {
             // 捕获数据库异常
@@ -163,8 +166,9 @@ public class Product implements InterfaceProduct {
                 e.printStackTrace();
             }
         }
-        return productInfo;
+        return productList;
     }
+
 
     @Override
     public List<ProductInfo> searchProductInfo(int stuNum) {

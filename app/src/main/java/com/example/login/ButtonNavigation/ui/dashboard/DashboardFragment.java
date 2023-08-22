@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,7 @@ import java.util.Date;
 
 public class DashboardFragment extends Fragment {
     private ImageView imageViewUpload, imageViewDelete;
-    private Button btnUploadImage, btnPublish, btnCamera, btnAlbum, btnCancel, btnDelete, btnSearch, btnUpdate;
+    private Button btnUploadImage, btnPublish, btnCamera, btnAlbum, btnCancel;
     private EditText title, content, price;
     private Animation slideInAnimation;
     private FrameLayout mask;
@@ -94,7 +95,6 @@ public class DashboardFragment extends Fragment {
             ProductInfo productInfo = new ProductInfo();
             Product product = new Product();
 
-
             String titleText = title.getText().toString().trim();
             if (titleText.isEmpty()) {
                 Toast.makeText(requireContext(), "请输入标题", Toast.LENGTH_SHORT).show();
@@ -127,7 +127,7 @@ public class DashboardFragment extends Fragment {
 
             productInfo.setIsCollect(0);
 
-            int stuNum = LogIn.getStuNumToDb();
+            int stuNum = LogIn.getStuNumToAllAction();
             productInfo.setStuNum(stuNum);
 
             new Thread(() -> {
@@ -135,64 +135,15 @@ public class DashboardFragment extends Fragment {
                 requireActivity().runOnUiThread(() -> {
                     if (result != -1) {
                         Toast.makeText(requireContext(), "发布成功", Toast.LENGTH_SHORT).show();
+
+                        title.setText("");
+                        content.setText("");
+                        price.setText("");
+                        imageViewDelete.setVisibility(View.GONE);
+                        imageViewUpload.setVisibility(View.GONE);
+                        imageData = null;
                     } else {
                         Toast.makeText(requireContext(), "发布失败", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }).start();
-        });
-
-        btnDelete.setOnClickListener(view18 -> {
-            Product product = new Product();
-            int imageId = 2;
-
-            new Thread(() -> {
-                int result = product.deleteProductInfoByImageId(imageId);
-                requireActivity().runOnUiThread(() -> {
-                    if (result != -1) {
-                        Toast.makeText(requireContext(), "删除成功", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(requireContext(), "删除失败", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }).start();
-        });
-
-        btnSearch.setOnClickListener(view19 -> {
-            Product product = new Product();
-            String searchTitle = "i";
-            new Thread(() -> {
-                ProductInfo productInfo = product.searchProductInfo(searchTitle);
-                requireActivity().runOnUiThread(() -> {
-                    title.setText(productInfo.getTitle());
-                    price.setText(productInfo.getPrice().toString());
-                });
-
-            }).start();
-        });
-
-        btnUpdate.setOnClickListener(view110 -> {
-            Product product = new Product();
-            int imageId = 1;
-            String searchTitle = "i";
-            new Thread(() -> {
-                ProductInfo productInfo = product.searchProductInfo(searchTitle);
-                String priceValue = price.getText().toString();
-                if (!priceValue.isEmpty()) {
-                    productInfo.setPrice(new BigDecimal(priceValue));
-                }
-                productInfo.setTitle(title.getText().toString());
-
-                if (isImageUploadSuccess && imageData != null) {
-                    productInfo.setImage(imageData);
-                }
-
-                int result = product.updateProductInfoByImageId(productInfo, imageId);
-                requireActivity().runOnUiThread(() -> {
-                    if (result != -1) {
-                        Toast.makeText(requireContext(), "修改成功", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(requireContext(), "修改失败", Toast.LENGTH_SHORT).show();
                     }
                 });
             }).start();
@@ -209,9 +160,6 @@ public class DashboardFragment extends Fragment {
         btnCamera = view.findViewById(R.id.btnCamera);
         btnAlbum = view.findViewById(R.id.btnAlbum);
         btnCancel = view.findViewById(R.id.btnCancel);
-        btnDelete = view.findViewById(R.id.btnDelete);
-        btnSearch = view.findViewById(R.id.btnSearch);
-        btnUpdate = view.findViewById(R.id.btnUpdate);
 
         title = view.findViewById(R.id.title);
         content = view.findViewById(R.id.content);
@@ -309,6 +257,8 @@ public class DashboardFragment extends Fragment {
             imageViewDelete.setVisibility(View.VISIBLE);
             myLinearLayout.setVisibility(View.INVISIBLE);
             imageViewUpload.setVisibility(View.VISIBLE);
+
+
         } else {
             requireActivity().setResult(RESULT_CANCELED);
         }

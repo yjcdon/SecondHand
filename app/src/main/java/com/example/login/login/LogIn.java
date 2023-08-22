@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,8 +20,6 @@ import com.example.login.MySQL.Account;
 import com.example.login.R;
 import com.example.login.ButtonNavigation.Main;
 import com.example.login.StudentInfo;
-
-import java.util.ArrayList;
 
 public class LogIn extends AppCompatActivity {
     private ImageView visibilityOff, visibility;
@@ -183,7 +180,7 @@ public class LogIn extends AppCompatActivity {
         }
     }
 
-    public static int getStuNumToDb() {
+    public static int getStuNumToAllAction() {
         return stuNum;
     }
 
