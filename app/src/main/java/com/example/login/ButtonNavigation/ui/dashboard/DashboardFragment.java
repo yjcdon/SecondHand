@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -26,13 +25,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.login.MySQL.Product;
 import com.example.login.ProductInfo;
 import com.example.login.R;
+import com.example.login.login.LogIn;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -95,6 +94,7 @@ public class DashboardFragment extends Fragment {
             ProductInfo productInfo = new ProductInfo();
             Product product = new Product();
 
+
             String titleText = title.getText().toString().trim();
             if (titleText.isEmpty()) {
                 Toast.makeText(requireContext(), "请输入标题", Toast.LENGTH_SHORT).show();
@@ -127,8 +127,11 @@ public class DashboardFragment extends Fragment {
 
             productInfo.setIsCollect(0);
 
+            int stuNum = LogIn.getStuNumToDb();
+            productInfo.setStuNum(stuNum);
+
             new Thread(() -> {
-                int result = product.insertProduct(productInfo);
+                int result = product.insertProductInfo(productInfo);
                 requireActivity().runOnUiThread(() -> {
                     if (result != -1) {
                         Toast.makeText(requireContext(), "发布成功", Toast.LENGTH_SHORT).show();
@@ -144,7 +147,7 @@ public class DashboardFragment extends Fragment {
             int imageId = 2;
 
             new Thread(() -> {
-                int result = product.deleteProductByImageId(imageId);
+                int result = product.deleteProductInfoByImageId(imageId);
                 requireActivity().runOnUiThread(() -> {
                     if (result != -1) {
                         Toast.makeText(requireContext(), "删除成功", Toast.LENGTH_SHORT).show();
@@ -159,7 +162,7 @@ public class DashboardFragment extends Fragment {
             Product product = new Product();
             String searchTitle = "i";
             new Thread(() -> {
-                ProductInfo productInfo = product.searchProductByTitle(searchTitle);
+                ProductInfo productInfo = product.searchProductInfo(searchTitle);
                 requireActivity().runOnUiThread(() -> {
                     title.setText(productInfo.getTitle());
                     price.setText(productInfo.getPrice().toString());
@@ -173,7 +176,7 @@ public class DashboardFragment extends Fragment {
             int imageId = 1;
             String searchTitle = "i";
             new Thread(() -> {
-                ProductInfo productInfo = product.searchProductByTitle(searchTitle);
+                ProductInfo productInfo = product.searchProductInfo(searchTitle);
                 String priceValue = price.getText().toString();
                 if (!priceValue.isEmpty()) {
                     productInfo.setPrice(new BigDecimal(priceValue));
@@ -184,7 +187,7 @@ public class DashboardFragment extends Fragment {
                     productInfo.setImage(imageData);
                 }
 
-                int result = product.updateProductByImageId(productInfo, imageId);
+                int result = product.updateProductInfoByImageId(productInfo, imageId);
                 requireActivity().runOnUiThread(() -> {
                     if (result != -1) {
                         Toast.makeText(requireContext(), "修改成功", Toast.LENGTH_SHORT).show();

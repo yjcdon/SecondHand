@@ -69,16 +69,16 @@ public class SignUp extends AppCompatActivity {
     }
 
     private void judgeAndExec() {
-        String stuNumText = editTextStuNum.getText().toString().trim();
+        int stuNumText = Integer.parseInt(editTextStuNum.getText().toString().trim());
         String phoneNumText = editTextPhone.getText().toString().trim();
         String psw1 = editTextPassword.getText().toString().trim();
         String psw2 = editTextPassword2.getText().toString().trim();
 
-        if (stuNumText.isEmpty() && psw1.isEmpty() && psw2.isEmpty()) {
+        if (String.valueOf(stuNumText).isEmpty() && psw1.isEmpty() && psw2.isEmpty()) {
             Toast.makeText(SignUp.this, "请输入账号和密码!", Toast.LENGTH_SHORT).show();
         } else if (psw1.isEmpty()) {
             Toast.makeText(SignUp.this, "密码不能为空!", Toast.LENGTH_SHORT).show();
-        } else if (stuNumText.isEmpty()) {
+        } else if (String.valueOf(stuNumText).isEmpty()) {
             Toast.makeText(SignUp.this, "账号不能为空!", Toast.LENGTH_SHORT).show();
         } else if (!psw1.equals(psw2)) {
             Toast.makeText(SignUp.this, "密码不一致!", Toast.LENGTH_SHORT).show();
@@ -94,7 +94,7 @@ public class SignUp extends AppCompatActivity {
                 runOnUiThread(() -> {
                     Bundle bundle = new Bundle();
                     // 将账号和密码添加到 Bundle 中,key,value
-                    bundle.putString("stuNum", stuNumText);
+                    bundle.putInt("stuNum", stuNumText);
                     bundle.putString("password", psw1);
 
                     // 创建一个新的 Intent 对象，并将 Bundle 作为参数传递进去

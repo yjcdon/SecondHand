@@ -31,7 +31,7 @@ public class ForgetPassword extends AppCompatActivity {
             String psw1 = editTextNewPsw.getText().toString().trim();
             String psw2 = editTextNewPsw2.getText().toString().trim();
             String phoneText = editTextPhone.getText().toString().trim();
-            String stuNumText = editTextStuNum.getText().toString().trim();
+            int stuNumText = Integer.parseInt(editTextStuNum.getText().toString().trim());
 
 //            手机号输入要有其他限制
             if (Objects.equals(stuNumText, "")) {

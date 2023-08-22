@@ -5,7 +5,8 @@ package com.example.login;
  */
 
 public class StudentInfo {
-    private String stuNum, password, phone;
+    private String  password, phone;
+    private int stuNum;
 
     @Override
     public String toString() {
@@ -16,11 +17,11 @@ public class StudentInfo {
                 '}';
     }
 
-    public String getStuNum() {
+    public int getStuNum() {
         return stuNum;
     }
 
-    public void setStuNum(String stuNum) {
+    public void setStuNum(int stuNum) {
         this.stuNum = stuNum;
     }
 

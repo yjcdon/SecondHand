@@ -2,6 +2,8 @@ package com.example.login.MySQL;
 
 import com.example.login.StudentInfo;
 
+import java.util.ArrayList;
+
 public interface InterfaceAccount {
     void insertData(StudentInfo studentInfo);
 
@@ -9,5 +11,7 @@ public interface InterfaceAccount {
 
     void updatePswByStuNumAndPhone(StudentInfo studentInfo);
 
-    StudentInfo searchByStuNum(String stuNum);
+    StudentInfo searchByStuNum(int stuNum);
+
+    int[] searchAllStuNum();
 }

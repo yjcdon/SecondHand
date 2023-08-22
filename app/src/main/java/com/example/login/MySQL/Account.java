@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Account implements InterfaceAccount {
     private final static String DRIVER = "com.mysql.jdbc.Driver";
@@ -40,7 +41,7 @@ public class Account implements InterfaceAccount {
             conn = getConnection();
             String insert = "INSERT INTO account (stuNum, phone, password) VALUES (?, ?, ?)";
             pstmt = conn.prepareStatement(insert);
-            pstmt.setString(1, studentInfo.getStuNum());
+            pstmt.setInt(1, studentInfo.getStuNum());
             pstmt.setString(2, studentInfo.getPhone());
             pstmt.setString(3, studentInfo.getPassword());
             pstmt.executeUpdate();
@@ -97,7 +98,7 @@ public class Account implements InterfaceAccount {
             String update = "UPDATE account SET password = ? WHERE stuNum = ? and phone = ?";
             pstmt = conn.prepareStatement(update);
             pstmt.setString(1, studentInfo.getPassword());
-            pstmt.setString(2, studentInfo.getStuNum());
+            pstmt.setInt(2, studentInfo.getStuNum());
             pstmt.setString(3, studentInfo.getPhone());
             pstmt.executeUpdate();
 
@@ -117,7 +118,7 @@ public class Account implements InterfaceAccount {
     }
 
     @Override
-    public StudentInfo searchByStuNum(String stuNum) {
+    public StudentInfo searchByStuNum(int stuNum) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -127,12 +128,12 @@ public class Account implements InterfaceAccount {
             conn = getConnection();
             String query = "SELECT * FROM account WHERE stuNum = ?";
             pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, stuNum);
+            pstmt.setInt(1, stuNum);
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
                 studentInfo = new StudentInfo();
-                studentInfo.setStuNum(rs.getString("stuNum"));
+                studentInfo.setStuNum(rs.getInt("stuNum"));
                 studentInfo.setPassword(rs.getString("password"));
                 studentInfo.setPhone(rs.getString("phone"));
             }
@@ -153,6 +154,51 @@ public class Account implements InterfaceAccount {
         }
 
         return studentInfo;
+    }
+
+    @Override
+    public int[] searchAllStuNum() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        int[] stuNumsArray = new int[0];
+
+        try {
+            conn = getConnection();
+            String query = "SELECT stuNum FROM account";
+            pstmt = conn.prepareStatement(query);
+            rs = pstmt.executeQuery();
+
+            // 获取结果集的行数
+            rs.last();
+            int rowCount = rs.getRow();
+            rs.beforeFirst();
+
+            // 创建相应大小的 int[] 数组
+            stuNumsArray = new int[rowCount];
+
+            for (int i = 0; rs.next(); i++) {
+                int stuNum = rs.getInt("stuNum");
+                stuNumsArray[i] = stuNum;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return stuNumsArray;
     }
 
 }

@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Product implements InterfaceProduct {
     private final static String DRIVER = "com.mysql.jdbc.Driver";
@@ -30,12 +32,12 @@ public class Product implements InterfaceProduct {
         }
     }
 
-    public int insertProduct(ProductInfo productInfo) {
+    public int insertProductInfo(ProductInfo productInfo) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         try {
             conn = getConnection();
-            String insert = "INSERT INTO " + TABLENAME + " (title,content,price,image,publishTime,isCollect) VALUES (?, ?, ?, ?, ?, ?)";
+            String insert = "INSERT INTO " + TABLENAME + " (title,content,price,image,publishTime,isCollect,stuNum) VALUES (?, ?, ?, ?, ?, ?, ?)";
             pstmt = conn.prepareStatement(insert);
             pstmt.setString(1, productInfo.getTitle());
             pstmt.setString(2, productInfo.getContent());
@@ -44,7 +46,7 @@ public class Product implements InterfaceProduct {
             pstmt.setString(5, productInfo.getPublishTime());
 //            因为imageId为主键且自动递增,所以在插入时不需要设定初值
             pstmt.setInt(6, productInfo.getIsCollect());
-
+            pstmt.setInt(7, productInfo.getStuNum());
             return pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -63,7 +65,7 @@ public class Product implements InterfaceProduct {
         return -1;
     }
 
-    public int deleteProductByImageId(int imageId) {
+    public int deleteProductInfoByImageId(int imageId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         try {
@@ -91,7 +93,7 @@ public class Product implements InterfaceProduct {
     }
 
     @Override
-    public int updateProductByImageId(ProductInfo productInfo, int imageId) {
+    public int updateProductInfoByImageId(ProductInfo productInfo, int imageId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         try {
@@ -125,7 +127,7 @@ public class Product implements InterfaceProduct {
         return -1;
     }
 
-    public ProductInfo searchProductByTitle(String title) {
+    public ProductInfo searchProductInfo(String title) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs;
@@ -146,6 +148,7 @@ public class Product implements InterfaceProduct {
                 productInfo.setImageId(rs.getInt("imageId"));
                 productInfo.setIsCollect(rs.getInt("isCollect"));
                 productInfo.setPrice(rs.getBigDecimal("price"));
+                productInfo.setStuNum(rs.getInt("stuNum"));
             }
         } catch (SQLException e) {
             // 捕获数据库异常
@@ -163,5 +166,87 @@ public class Product implements InterfaceProduct {
         return productInfo;
     }
 
+    @Override
+    public List<ProductInfo> searchProductInfo(int stuNum) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs;
+        List<ProductInfo> productList = new ArrayList<>();
+        try {
+            conn = getConnection();
+            String search = "select * from " + TABLENAME + " where stuNum = ?";
+            pstmt = conn.prepareStatement(search);
+            pstmt.setInt(1, stuNum);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                ProductInfo productInfo = new ProductInfo();
+                productInfo.setTitle(rs.getString("title"));
+                productInfo.setImage(rs.getBytes("image"));
+                productInfo.setContent(rs.getString("content"));
+                productInfo.setPublishTime(rs.getString("publishTime"));
+                productInfo.setImageId(rs.getInt("imageId"));
+                productInfo.setIsCollect(rs.getInt("isCollect"));
+                productInfo.setPrice(rs.getBigDecimal("price"));
+                productInfo.setStuNum(rs.getInt("stuNum"));
+
+                productList.add(productInfo);
+            }
+        } catch (SQLException e) {
+            // 捕获数据库异常
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return productList;
+    }
+
+
+    public List<ProductInfo> searchAllProductInfo() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs;
+        List<ProductInfo> productList = new ArrayList<>();
+        try {
+            conn = getConnection();
+            String search = "select * from " + TABLENAME;
+            pstmt = conn.prepareStatement(search);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                ProductInfo productInfo = new ProductInfo();
+                productInfo.setTitle(rs.getString("title"));
+                productInfo.setImage(rs.getBytes("image"));
+                productInfo.setContent(rs.getString("content"));
+                productInfo.setPublishTime(rs.getString("publishTime"));
+                productInfo.setImageId(rs.getInt("imageId"));
+                productInfo.setIsCollect(rs.getInt("isCollect"));
+                productInfo.setPrice(rs.getBigDecimal("price"));
+                productInfo.setStuNum(rs.getInt("stuNum"));
+
+                productList.add(productInfo);
+            }
+        } catch (SQLException e) {
+            // 捕获数据库异常
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return productList;
+    }
 
 }

@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,6 +22,8 @@ import com.example.login.R;
 import com.example.login.ButtonNavigation.Main;
 import com.example.login.StudentInfo;
 
+import java.util.ArrayList;
+
 public class LogIn extends AppCompatActivity {
     private ImageView visibilityOff, visibility;
     private EditText editTextStuNum, editTextPassword;
@@ -28,6 +31,7 @@ public class LogIn extends AppCompatActivity {
     private CheckBox checkBoxRememberMe;
     private static final String KEY_ACCOUNT = "account", KEY_PASSWORD = "password", PREF_NAME = "myPref";
     private SharedPreferences sharedPreferences;
+    private static int stuNum;
 
 
     @Override
@@ -66,18 +70,19 @@ public class LogIn extends AppCompatActivity {
 
 
         btnLogin.setOnClickListener(view -> {
-            String stuNumText = editTextStuNum.getText().toString().trim();
+            int stuNumText = Integer.parseInt(editTextStuNum.getText().toString().trim());
             String passwordText = editTextPassword.getText().toString().trim();
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-            if (stuNumText.isEmpty() || passwordText.isEmpty()) {
+            if (String.valueOf(stuNumText).isEmpty() || passwordText.isEmpty()) {
                 Toast.makeText(LogIn.this, "请输入账号和密码!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             StudentInfo studentInfo = new StudentInfo();
             studentInfo.setStuNum(stuNumText);
+            LogIn.setStuNumByLogin(stuNumText);
 
             new Thread(() -> {
                 Account account = new Account();
@@ -100,6 +105,7 @@ public class LogIn extends AppCompatActivity {
                 });
 
             }).start();
+
         });
 
 //        CheckBox先设置监听,再判断是否选中
@@ -175,6 +181,14 @@ public class LogIn extends AppCompatActivity {
             editTextPassword.setText(savedPassword);
             checkBoxRememberMe.setChecked(true);
         }
+    }
+
+    public static int getStuNumToDb() {
+        return stuNum;
+    }
+
+    public static void setStuNumByLogin(int value) {
+        stuNum = value;
     }
 
 }

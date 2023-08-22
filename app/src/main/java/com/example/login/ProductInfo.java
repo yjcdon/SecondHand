@@ -5,9 +5,20 @@ import java.lang.String;
 import java.util.Arrays;
 
 public class ProductInfo {
-    private String title, content,publishTime;
+    private String title, content, publishTime;
     private byte[] image;
-    private int imageId, isCollect;
+    private int imageId;
+    private int isCollect;
+
+    public int getStuNum() {
+        return stuNum;
+    }
+
+    public void setStuNum(int stuNum) {
+        this.stuNum = stuNum;
+    }
+
+    private int stuNum;
     private BigDecimal price;
 
     @Override
@@ -15,10 +26,11 @@ public class ProductInfo {
         return "ProductInfo{" +
                 "title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", publishTime='" + publishTime + '\'' +
                 ", image=" + Arrays.toString(image) +
-                ", publishTime=" + publishTime +
                 ", imageId=" + imageId +
                 ", isCollect=" + isCollect +
+                ", stuNum=" + stuNum +
                 ", price=" + price +
                 '}';
     }
