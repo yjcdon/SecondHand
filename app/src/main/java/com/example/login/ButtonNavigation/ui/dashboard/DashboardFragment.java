@@ -8,6 +8,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.login.MySQL.Product;
 import com.example.login.ProductInfo;
@@ -42,7 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DashboardFragment extends Fragment {
-    private ImageView imageViewUpload, imageViewDelete;
+    private ImageView imageViewUpload, imageViewDelete, imageViewRawImage;
     private Button btnUploadImage, btnPublish, btnCamera, btnAlbum, btnCancel;
     private EditText title, content, price;
     private Animation slideInAnimation;
@@ -51,7 +54,7 @@ public class DashboardFragment extends Fragment {
     private byte[] imageData;
     private static final int REQUEST_CODE_ALBUM = 0, REQUEST_IMAGES_VIDEO_PERMISSION = 1, REQUEST_CODE_CAMERA = 2, REQUEST_CAMERA_PERMISSION = 3;
     private static final int RESULT_CODE_SUCCESS = 100;
-    private boolean isImageUploadSuccess = false, isProductUploadSuccess = false;
+    private boolean isImageUploadSuccess = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
@@ -71,6 +74,7 @@ public class DashboardFragment extends Fragment {
         mask.setOnClickListener(view16 -> {
             myLinearLayout.setVisibility(View.GONE);
             mask.setVisibility(View.GONE);
+            imageViewRawImage.setVisibility(View.GONE);
         });
 
         btnCamera.setOnClickListener(view15 -> {
@@ -89,6 +93,22 @@ public class DashboardFragment extends Fragment {
         imageViewDelete.setOnClickListener(view12 -> {
             imageViewUpload.setVisibility(View.GONE);
             imageViewDelete.setVisibility(View.GONE);
+        });
+
+        imageViewUpload.setOnClickListener(view18 -> {
+            imageViewRawImage.setVisibility(View.VISIBLE);
+            mask.setVisibility(View.VISIBLE);
+            mask.setAlpha(1.0f);
+            if (imageData != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                imageViewRawImage.setImageBitmap(bitmap);
+            }
+        });
+
+        imageViewRawImage.setOnClickListener(view19 -> {
+            imageViewRawImage.setVisibility(View.GONE);
+            mask.setAlpha(0.5f);
+            mask.setVisibility(View.GONE);
         });
 
         btnPublish.setOnClickListener(view17 -> {
@@ -154,6 +174,7 @@ public class DashboardFragment extends Fragment {
     private void initView(View view) {
         imageViewUpload = view.findViewById(R.id.imageViewUpload);
         imageViewDelete = view.findViewById(R.id.imageViewDelete);
+        imageViewRawImage = view.findViewById(R.id.imageViewRawImage);
 
         btnUploadImage = view.findViewById(R.id.btnUploadImage);
         btnPublish = view.findViewById(R.id.btnPublish);
@@ -257,7 +278,6 @@ public class DashboardFragment extends Fragment {
             imageViewDelete.setVisibility(View.VISIBLE);
             myLinearLayout.setVisibility(View.INVISIBLE);
             imageViewUpload.setVisibility(View.VISIBLE);
-
 
         } else {
             requireActivity().setResult(RESULT_CANCELED);
