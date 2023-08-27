@@ -34,10 +34,12 @@ public class Product implements InterfaceProduct {
 
     public int insertProductInfo(ProductInfo productInfo) {
         Connection conn = null;
+//        这个可以进行参数化查询防止SQL注入
         PreparedStatement pstmt = null;
         try {
-            conn = getConnection();
+            conn = getConnection();//连接数据库
             String insert = "INSERT INTO " + TABLENAME + " (title,content,price,image,publishTime,isCollect,stuNum) VALUES (?, ?, ?, ?, ?, ?, ?)";
+//            创建了一个PreparedStatement对象，并将delete语句传递给它。PreparedStatement会对SQL语句进行预编译和解析。
             pstmt = conn.prepareStatement(insert);
             pstmt.setString(1, productInfo.getTitle());
             pstmt.setString(2, productInfo.getContent());
@@ -47,6 +49,7 @@ public class Product implements InterfaceProduct {
 //            因为imageId为主键且自动递增,所以在插入时不需要设定初值
             pstmt.setInt(6, productInfo.getIsCollect());
             pstmt.setInt(7, productInfo.getStuNum());
+            //返回影响的行数
             return pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -77,7 +80,6 @@ public class Product implements InterfaceProduct {
             return pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            // 捕获数据库异常
             e.printStackTrace();
         } finally {
             try {
@@ -113,7 +115,36 @@ public class Product implements InterfaceProduct {
             return pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            // 捕获数据库异常
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public int updateIsCollect(int imageId, int stuNum) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = getConnection();
+            String update = "update " + TABLENAME +
+                    " set isCollect=? where imageId=? and stuNum=?";
+            pstmt = conn.prepareStatement(update);
+            pstmt.setInt(1, 1);
+            pstmt.setInt(2, imageId);
+            pstmt.setInt(3, stuNum);
+
+            return pstmt.executeUpdate();
+
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -154,7 +185,6 @@ public class Product implements InterfaceProduct {
                 productList.add(productInfo);
             }
         } catch (SQLException e) {
-            // 捕获数据库异常
             e.printStackTrace();
         } finally {
             try {
@@ -197,7 +227,6 @@ public class Product implements InterfaceProduct {
                 productList.add(productInfo);
             }
         } catch (SQLException e) {
-            // 捕获数据库异常
             e.printStackTrace();
         } finally {
             try {
@@ -238,7 +267,6 @@ public class Product implements InterfaceProduct {
                 productList.add(productInfo);
             }
         } catch (SQLException e) {
-            // 捕获数据库异常
             e.printStackTrace();
         } finally {
             try {
@@ -252,5 +280,6 @@ public class Product implements InterfaceProduct {
         }
         return productList;
     }
+
 
 }

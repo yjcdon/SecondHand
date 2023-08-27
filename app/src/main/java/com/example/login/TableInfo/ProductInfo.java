@@ -10,6 +10,7 @@ public class ProductInfo {
     private int isCollect, stuNum, imageId;
     private BigDecimal price;
 
+
     @Override
     public String toString() {
         return "ProductInfo{" +

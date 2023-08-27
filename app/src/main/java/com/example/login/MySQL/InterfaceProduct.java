@@ -20,4 +20,5 @@ public interface InterfaceProduct {
     //    到时候修改的activity或者fragment可以把发布界面复制过去
     int updateProductInfo(ProductInfo productInfo, int imageId, int stuNum);
 
+    int updateIsCollect(int imageId, int stuNum);
 }
